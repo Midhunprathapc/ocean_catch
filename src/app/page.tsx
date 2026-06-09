@@ -11,7 +11,6 @@ interface OrderItem {
   title: string
   category: string
   price: number
-  originalPrice: number | null
   image: string
   quantity: number
 }
@@ -28,18 +27,18 @@ interface PurchasedOrder {
 }
 
 const products = [
-  { id: 1, title: 'OCTOPUS SMALL', category: 'SHELLED FISH', price: 420, originalPrice: 520, image: '/products/octopus.png' },
-  { id: 2, title: 'SEA CRAB / KADAL NJAND - MEDIUM', category: 'SHELLED FISH', price: 380, originalPrice: null, image: '/products/crab.png' },
-  { id: 3, title: 'SALMON FILLET', category: 'SEA WATER FISH', price: 890, originalPrice: 1050, image: '/products/salmon.png' },
-  { id: 4, title: 'PRAWNS / CHEMMEEN - LARGE', category: 'SHELLED FISH', price: 550, originalPrice: null, image: '/products/prawns.png' },
-  { id: 5, title: 'KING FISH / NEIMEEN', category: 'SEA WATER FISH', price: 720, originalPrice: 850, image: '/products/kingfish.png' },
-  { id: 6, title: 'MUSSELS / KALLUMMAKAYA', category: 'SHELLED FISH', price: 280, originalPrice: null, image: '/products/mussels.png' },
-  { id: 7, title: 'SARDINES / MATHI', category: 'SEA WATER FISH', price: 180, originalPrice: null, image: '/products/sardines.png' },
-  { id: 8, title: 'SQUID / KOONTHAL', category: 'SHELLED FISH', price: 460, originalPrice: 550, image: '/products/squid.png' },
-  { id: 9, title: 'TUNA / CHOORA', category: 'SEA WATER FISH', price: 590, originalPrice: null, image: '/products/tuna.png' },
-  { id: 10, title: 'PEARL SPOT / KARIMEEN', category: 'BACKWATER FISH', price: 650, originalPrice: 780, image: '/products/pearlspot.png' },
-  { id: 11, title: 'POMFRET / AVOLI', category: 'SEA WATER FISH', price: 780, originalPrice: null, image: '/products/pomfret.png' },
-  { id: 12, title: 'ROHU / ROHU', category: 'BACKWATER FISH', price: 320, originalPrice: null, image: '/products/rohu.png' },
+  { id: 1, title: 'OCTOPUS SMALL', category: 'SHELLED FISH', price: 420, image: '/products/octopus.png' },
+  { id: 2, title: 'SEA CRAB / KADAL NJAND - MEDIUM', category: 'SHELLED FISH', price: 380, image: '/products/crab.png' },
+  { id: 3, title: 'SALMON FILLET', category: 'SEA WATER FISH', price: 890, image: '/products/salmon.png' },
+  { id: 4, title: 'PRAWNS / CHEMMEEN - LARGE', category: 'SHELLED FISH', price: 550, image: '/products/prawns.png' },
+  { id: 5, title: 'KING FISH / NEIMEEN', category: 'SEA WATER FISH', price: 720, image: '/products/kingfish.png' },
+  { id: 6, title: 'MUSSELS / KALLUMMAKAYA', category: 'SHELLED FISH', price: 280, image: '/products/mussels.png' },
+  { id: 7, title: 'SARDINES / MATHI', category: 'SEA WATER FISH', price: 180, image: '/products/sardines.png' },
+  { id: 8, title: 'SQUID / KOONTHAL', category: 'SHELLED FISH', price: 460, image: '/products/squid.png' },
+  { id: 9, title: 'TUNA / CHOORA', category: 'SEA WATER FISH', price: 590, image: '/products/tuna.png' },
+  { id: 10, title: 'PEARL SPOT / KARIMEEN', category: 'BACKWATER FISH', price: 650, image: '/products/pearlspot.png' },
+  { id: 11, title: 'POMFRET / AVOLI', category: 'SEA WATER FISH', price: 780, image: '/products/pomfret.png' },
+  { id: 12, title: 'ROHU / ROHU', category: 'BACKWATER FISH', price: 320, image: '/products/rohu.png' },
 ]
 
 const fishCategories = [
@@ -367,11 +366,7 @@ export default function Home() {
                     <p className="text-base font-bold text-[#0891B2]">
                       ₹ {product.price.toFixed(2)}/kg
                     </p>
-                    {product.originalPrice && (
-                      <p className="text-xs text-gray-400 line-through mt-0.5">
-                        ₹ {product.originalPrice.toFixed(2)}/kg
-                      </p>
-                    )}
+
 
                     {/* Call to Order Button */}
                     <button
