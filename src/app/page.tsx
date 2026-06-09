@@ -1,30 +1,10 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Search, ChevronDown, Phone, Mail, Facebook, Instagram, ArrowLeft, Package, CheckCircle, Clock, MapPin, Fish, Truck, Star, X, PhoneCall, MessageCircle, Info, Scale, Droplets, ShieldCheck } from 'lucide-react'
+import { Search, ChevronDown, Phone, Mail, Facebook, Instagram, ArrowLeft, Clock, MapPin, Fish, Truck, X, PhoneCall, MessageCircle, Info, Scale, Droplets, ShieldCheck } from 'lucide-react'
 import Image from 'next/image'
 
-type Page = 'home' | 'buyfish' | 'story' | 'contact'
-
-interface OrderItem {
-  id: number
-  title: string
-  category: string
-  price: number
-  image: string
-  quantity: number
-}
-
-interface PurchasedOrder {
-  id: string
-  items: OrderItem[]
-  totalPrice: number
-  totalItems: number
-  orderDate: string
-  status: 'Confirmed' | 'Processing' | 'Shipped' | 'Delivered'
-  deliveryDate: string
-  address: string
-}
+type Page = 'home' | 'story' | 'contact'
 
 const products = [
   { id: 1, title: 'OCTOPUS SMALL', category: 'SHELLED FISH', price: 420, image: '/products/octopus.png' },
@@ -65,69 +45,14 @@ const categoryToFilter: Record<string, string> = {
   'Live Fish': 'LIVE FISH',
 }
 
-const statusConfig: Record<string, { color: string; bg: string; icon: typeof Clock }> = {
-  Confirmed: { color: 'text-blue-700', bg: 'bg-blue-50 border-blue-200', icon: CheckCircle },
-  Processing: { color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', icon: Clock },
-  Shipped: { color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', icon: Truck },
-  Delivered: { color: 'text-green-700', bg: 'bg-green-50 border-green-200', icon: CheckCircle },
-}
-
 const COMPANY_PHONE = '+91 9539008444'
-
-// Generate mock past orders for demo
-function generateMockOrders(): PurchasedOrder[] {
-  return [
-    {
-      id: 'OC-2024-0847',
-      items: [
-        { ...products[2], quantity: 2 },
-        { ...products[4], quantity: 1 },
-      ],
-      totalPrice: 2500,
-      totalItems: 3,
-      orderDate: '2024-12-28',
-      status: 'Delivered',
-      deliveryDate: '2024-12-29',
-      address: '42, Marine Drive, Kochi, Kerala 682031',
-    },
-    {
-      id: 'OC-2024-0923',
-      items: [
-        { ...products[3], quantity: 1 },
-        { ...products[7], quantity: 2 },
-      ],
-      totalPrice: 1470,
-      totalItems: 3,
-      orderDate: '2025-01-05',
-      status: 'Shipped',
-      deliveryDate: '2025-01-07',
-      address: '15, MG Road, Thiruvananthapuram, Kerala 695001',
-    },
-    {
-      id: 'OC-2025-0102',
-      items: [
-        { ...products[9], quantity: 1 },
-        { ...products[0], quantity: 1 },
-      ],
-      totalPrice: 1070,
-      totalItems: 2,
-      orderDate: '2025-03-02',
-      status: 'Processing',
-      deliveryDate: '2025-03-04',
-      address: '8, Church Street, Bengaluru, Karnataka 560001',
-    },
-  ]
-}
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState<Page>('home')
-  const [purchasedOrders] = useState<PurchasedOrder[]>(generateMockOrders())
   const [callToast, setCallToast] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState('All Fish')
-  const [expandedOrder, setExpandedOrder] = useState<string | null>(null)
   const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null)
   const [isStoryDropdownOpen, setIsStoryDropdownOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
   const storyDropdownRef = useRef<HTMLDivElement>(null)
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -190,8 +115,8 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const breadcrumbTitle = currentPage === 'home' ? 'Buy Fish' : currentPage === 'buyfish' ? 'My Orders' : currentPage === 'story' ? 'Why OceanCatch' : 'Reach Us'
-  const breadcrumbPath = currentPage === 'home' ? 'Buy Fish' : currentPage === 'buyfish' ? 'My Orders' : currentPage === 'story' ? 'Why OceanCatch' : 'Reach Us'
+  const breadcrumbTitle = currentPage === 'home' ? 'Buy Fish' : currentPage === 'story' ? 'Why OceanCatch' : 'Reach Us'
+  const breadcrumbPath = currentPage === 'home' ? 'Buy Fish' : currentPage === 'story' ? 'Why OceanCatch' : 'Reach Us'
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F7F7]">
@@ -249,15 +174,13 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between py-2.5">
               <div className="flex items-center gap-6">
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={() => navigateTo('buyfish')}
-                    className="bg-[#0891B2] hover:bg-[#0E7490] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors"
-                  >
-                    <Fish className="w-4 h-4" />
-                    Buy Fish
-                  </button>
-                </div>
+                <button
+                  onClick={() => navigateTo('home')}
+                  className="bg-[#0891B2] hover:bg-[#0E7490] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors"
+                >
+                  <Fish className="w-4 h-4" />
+                  Buy Fish
+                </button>
                 <nav className="flex items-center gap-6">
                   <button
                     onClick={() => navigateTo('home')}
@@ -315,7 +238,7 @@ export default function Home() {
                 Home
               </button>
               <span className="mx-2">/</span>
-              <button onClick={() => navigateTo(currentPage === 'story' ? 'story' : currentPage === 'contact' ? 'contact' : 'buyfish')} className="hover:text-[#0891B2] transition-colors text-gray-700">
+              <button onClick={() => navigateTo(currentPage)} className="hover:text-[#0891B2] transition-colors text-gray-700">
                 {breadcrumbPath}
               </button>
             </p>
@@ -860,7 +783,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        ) : currentPage === 'home' ? (
+        ) : (
           /* ===== HOME PAGE - PRODUCT GRID ===== */
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Category Filter Bar */}
@@ -958,182 +881,6 @@ export default function Home() {
                 <Fish className="w-16 h-16 mx-auto text-gray-200 mb-4" />
                 <h3 className="text-lg font-bold text-gray-600 mb-2">No fish found</h3>
                 <p className="text-sm text-gray-400">Try selecting a different category</p>
-              </div>
-            )}
-          </div>
-        ) : (
-          /* ===== MY ORDERS PAGE - PURCHASED ORDERS ===== */
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {/* Back Button */}
-            <button
-              onClick={() => navigateTo('home')}
-              className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#0891B2] transition-colors mb-6"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Continue Shopping
-            </button>
-
-            {/* Page Title */}
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-[#0891B2] rounded-xl flex items-center justify-center">
-                <Package className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-gray-800">My Orders</h2>
-                <p className="text-sm text-gray-500">{purchasedOrders.length} order{purchasedOrders.length !== 1 ? 's' : ''} placed</p>
-              </div>
-            </div>
-
-            {purchasedOrders.length === 0 ? (
-              <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
-                <div className="w-24 h-24 mx-auto bg-[#CFFAFE] rounded-full flex items-center justify-center mb-6">
-                  <Package className="w-12 h-12 text-[#0891B2] opacity-50" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-800 mb-2">No orders yet</h2>
-                <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">
-                  You haven&apos;t placed any orders yet. Call us to order your fresh catch!
-                </p>
-                <a
-                  href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                  className="inline-flex items-center gap-2 bg-[#0891B2] hover:bg-[#0E7490] text-white text-sm font-semibold px-8 py-3 rounded-lg transition-colors"
-                >
-                  <PhoneCall className="w-4 h-4" />
-                  Call to Order
-                </a>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {purchasedOrders.map((order) => {
-                  const isExpanded = expandedOrder === order.id
-                  const statusInfo = statusConfig[order.status]
-                  const StatusIcon = statusInfo.icon
-
-                  return (
-                    <div
-                      key={order.id}
-                      className="bg-white rounded-2xl shadow-sm overflow-hidden"
-                    >
-                      {/* Order Header */}
-                      <div
-                        className="px-6 py-4 cursor-pointer hover:bg-gray-50/50 transition-colors"
-                        onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
-                      >
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                          <div className="flex items-center gap-4">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${statusInfo.bg} border`}>
-                              <StatusIcon className={`w-5 h-5 ${statusInfo.color}`} />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-sm font-bold text-gray-900">Order {order.id}</h3>
-                                <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${statusInfo.bg} ${statusInfo.color}`}>
-                                  {order.status}
-                                </span>
-                              </div>
-                              <p className="text-xs text-gray-400 mt-0.5">
-                                Placed on {new Date(order.orderDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-6">
-                            <div className="text-right">
-                              <p className="text-sm font-bold text-[#0891B2]">₹ {order.totalPrice.toFixed(2)}</p>
-                              <p className="text-xs text-gray-400">{order.items.length} type{order.items.length !== 1 ? 's' : ''} · {order.totalItems} kg</p>
-                            </div>
-                            <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
-                          </div>
-                        </div>
-
-                        {/* Order Progress Bar */}
-                        <div className="mt-4 flex items-center gap-1">
-                          {['Confirmed', 'Processing', 'Shipped', 'Delivered'].map((step, i) => {
-                            const isCompleted = ['Confirmed', 'Processing', 'Shipped', 'Delivered'].indexOf(order.status) >= i
-                            const isCurrent = order.status === step
-                            return (
-                              <div key={step} className="flex-1 flex items-center gap-1">
-                                <div className={`h-1.5 flex-1 rounded-full transition-all ${
-                                  isCompleted ? 'bg-[#0891B2]' : 'bg-gray-200'
-                                } ${isCurrent ? 'animate-pulse' : ''}`} />
-                                {i < 3 && (
-                                  <div className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${
-                                    isCompleted ? 'bg-[#0891B2]' : 'bg-gray-200'
-                                  }`} />
-                                )}
-                              </div>
-                            )
-                          })}
-                        </div>
-                        <div className="mt-1 flex justify-between">
-                          <span className="text-[9px] text-gray-400">Confirmed</span>
-                          <span className="text-[9px] text-gray-400">Processing</span>
-                          <span className="text-[9px] text-gray-400">Shipped</span>
-                          <span className="text-[9px] text-gray-400">Delivered</span>
-                        </div>
-                      </div>
-
-                      {/* Expanded Order Details */}
-                      {isExpanded && (
-                        <div className="border-t border-gray-100">
-                          {/* Order Items */}
-                          <div className="divide-y divide-gray-50">
-                            {order.items.map((item) => (
-                              <div key={item.id} className="px-6 py-4 flex items-center gap-4">
-                                <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-50">
-                                  <Image
-                                    src={item.image}
-                                    alt={item.title}
-                                    fill
-                                    className="object-cover"
-                                    sizes="64px"
-                                  />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <h4 className="text-sm font-semibold text-gray-900 tracking-wide">{item.title}</h4>
-                                  <p className="text-xs text-gray-400">{item.category} · {item.quantity} kg</p>
-                                </div>
-                                <p className="text-sm font-bold text-gray-800 flex-shrink-0">
-                                  ₹ {(item.price * item.quantity).toFixed(2)}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Order Footer */}
-                          <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                              <div className="flex items-start gap-4">
-                                <div className="flex items-start gap-1.5">
-                                  <MapPin className="w-3.5 h-3.5 text-gray-400 mt-0.5" />
-                                  <p className="text-xs text-gray-500 max-w-xs">{order.address}</p>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-3">
-                                {order.status !== 'Delivered' && (
-                                  <div className="flex items-center gap-1 text-xs text-gray-500">
-                                    <Truck className="w-3.5 h-3.5" />
-                                    <span>ETA: {new Date(order.deliveryDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
-                                  </div>
-                                )}
-                                <button className="text-xs font-semibold text-[#0891B2] hover:text-[#0E7490] transition-colors flex items-center gap-1">
-                                  <Star className="w-3 h-3" />
-                                  Rate Order
-                                </button>
-                                <a
-                                  href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                                  className="text-xs font-semibold text-[#25D366] hover:text-[#1DA851] transition-colors flex items-center gap-1"
-                                >
-                                  <PhoneCall className="w-3 h-3" />
-                                  Reorder
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
               </div>
             )}
           </div>
