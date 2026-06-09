@@ -342,7 +342,7 @@ export default function Home() {
               {filteredProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200"
+                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200 flex flex-col"
                 >
                   {/* Product Image */}
                   <div className="relative aspect-square bg-gray-50 overflow-hidden">
@@ -356,8 +356,8 @@ export default function Home() {
                   </div>
 
                   {/* Product Info */}
-                  <div className="p-4 text-center">
-                    <h3 className="text-sm font-bold text-gray-900 tracking-wide mb-1">
+                  <div className="p-4 text-center flex flex-col flex-1">
+                    <h3 className="text-sm font-bold text-gray-900 tracking-wide mb-1 min-h-[2.5rem]">
                       {product.title}
                     </h3>
                     <p className="text-xs text-gray-400 font-medium tracking-wider mb-2">
@@ -366,6 +366,7 @@ export default function Home() {
                     <p className="text-base font-bold text-[#0891B2]">
                       ₹ {product.price.toFixed(2)}/kg
                     </p>
+                    <div className="mt-auto pt-3">
 
 
                     {/* Call to Order Button */}
@@ -385,6 +386,7 @@ export default function Home() {
                       <MessageCircle className="w-4 h-4" />
                       WhatsApp
                     </button>
+                    </div>
                   </div>
                 </div>
               ))}
