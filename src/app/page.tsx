@@ -232,7 +232,7 @@ export default function Home() {
               <div className="flex-shrink-0 cursor-pointer" onClick={() => navigateTo('home')}>
                 <div className="flex flex-col items-start">
                   <span className="text-2xl font-bold text-[#E55B5B] tracking-wide" style={{ fontFamily: 'var(--font-inter)' }}>
-                    salmons
+                    OceanCatch
                   </span>
                   <span className="text-[10px] font-medium text-gray-500 tracking-[0.2em] -mt-1">
                     DEFINITELY FRESH
@@ -312,7 +312,7 @@ export default function Home() {
                 </a>
                 <a href="#" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
                   <Mail className="w-3 h-3" />
-                  <span>customercare@salmons.in</span>
+                  <span>customercare@oceancatch.in</span>
                 </a>
               </div>
             </div>
@@ -845,7 +845,7 @@ export default function Home() {
               <div className="sm:col-span-2 lg:col-span-1">
                 <div className="flex flex-col items-start cursor-pointer" onClick={() => navigateTo('home')}>
                   <span className="text-2xl font-bold text-[#E55B5B] tracking-wide">
-                    salmons
+                    OceanCatch
                   </span>
                   <span className="text-[10px] font-medium text-gray-500 tracking-[0.2em] -mt-1">
                     DEFINITELY FRESH
@@ -860,8 +860,8 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-bold text-gray-900 mb-4">Quick Links</h4>
                 <ul className="space-y-2.5">
-                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Why Salmons?</a></li>
-                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">How Salmons?</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Why OceanCatch?</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">How OceanCatch?</a></li>
                   <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Reach Us</a></li>
                 </ul>
               </div>
@@ -926,7 +926,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-xs text-white/90">
-                © Salmons, a unit of Hallmark Food Products LLP. Powered by Skywall
+                © OceanCatch, a unit of Hallmark Food Products LLP. Powered by Skywall
               </p>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1 px-2 py-1 rounded bg-white/15">

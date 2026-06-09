@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Salmons - Definitely Fresh | Premium Seafood Delivery",
+  title: "OceanCatch - Definitely Fresh | Premium Seafood Delivery",
   description: "Fresh seafood delivered to your doorstep. Premium quality fish, prawns, crabs and more.",
   icons: {
     icon: "/logo.svg",
