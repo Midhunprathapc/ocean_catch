@@ -328,7 +328,9 @@ export default function Home() {
                 Home
               </button>
               <span className="mx-2">/</span>
-              <span className="text-gray-700">{breadcrumbPath}</span>
+              <button onClick={() => navigateTo('buyfish')} className="hover:text-[#E55B5B] transition-colors text-gray-700">
+                {breadcrumbPath}
+              </button>
             </p>
           </div>
         </div>
