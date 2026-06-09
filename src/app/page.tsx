@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Search, ChevronDown, Phone, Mail, Facebook, Instagram, ArrowLeft, Package, CheckCircle, Clock, MapPin, Fish, Truck, Star, X, PhoneCall, MessageCircle, Info, Scale, Droplets, ShieldCheck } from 'lucide-react'
 import Image from 'next/image'
 
-type Page = 'home' | 'buyfish'
+type Page = 'home' | 'buyfish' | 'story'
 
 interface OrderItem {
   id: number
@@ -126,7 +126,9 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('All Fish')
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null)
   const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null)
+  const [isStoryDropdownOpen, setIsStoryDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const storyDropdownRef = useRef<HTMLDivElement>(null)
   const modalRef = useRef<HTMLDivElement>(null)
 
   const filteredProducts = selectedCategory === 'All Fish'
@@ -135,8 +137,8 @@ export default function Home() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        // dropdown close logic if needed
+      if (storyDropdownRef.current && !storyDropdownRef.current.contains(event.target as Node)) {
+        setIsStoryDropdownOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -188,8 +190,8 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const breadcrumbTitle = currentPage === 'home' ? 'Buy Fish' : 'My Orders'
-  const breadcrumbPath = currentPage === 'home' ? 'Buy Fish' : 'My Orders'
+  const breadcrumbTitle = currentPage === 'home' ? 'Buy Fish' : currentPage === 'buyfish' ? 'My Orders' : 'Why OceanCatch'
+  const breadcrumbPath = currentPage === 'home' ? 'Buy Fish' : currentPage === 'buyfish' ? 'My Orders' : 'Why OceanCatch'
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F7F7]">
@@ -263,10 +265,25 @@ export default function Home() {
                   >
                     Buy Now
                   </button>
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors flex items-center gap-1">
-                    Salmon&apos;s Story
-                    <ChevronDown className="w-3 h-3" />
-                  </a>
+                  <div className="relative" ref={storyDropdownRef}>
+                    <button
+                      onClick={() => setIsStoryDropdownOpen(!isStoryDropdownOpen)}
+                      className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors flex items-center gap-1"
+                    >
+                      OceanCatch Story
+                      <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isStoryDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isStoryDropdownOpen && (
+                      <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-b-md shadow-lg border-t-2 border-[#0891B2] z-50 py-1">
+                        <button
+                          onClick={() => { navigateTo('story'); setIsStoryDropdownOpen(false) }}
+                          className="block w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-[#CFFAFE] hover:text-[#0891B2] transition-colors"
+                        >
+                          Why OceanCatch?
+                        </button>
+                      </div>
+                    )}
+                  </div>
                   <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors">
                     Reach Us
                   </a>
@@ -295,7 +312,7 @@ export default function Home() {
                 Home
               </button>
               <span className="mx-2">/</span>
-              <button onClick={() => navigateTo('buyfish')} className="hover:text-[#0891B2] transition-colors text-gray-700">
+              <button onClick={() => navigateTo(currentPage === 'story' ? 'story' : 'buyfish')} className="hover:text-[#0891B2] transition-colors text-gray-700">
                 {breadcrumbPath}
               </button>
             </p>
@@ -437,7 +454,174 @@ export default function Home() {
 
       {/* ===== MAIN CONTENT ===== */}
       <main className="flex-1">
-        {currentPage === 'home' ? (
+        {currentPage === 'story' ? (
+          /* ===== WHY OCEANCATCH PAGE ===== */
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Back Button */}
+            <button
+              onClick={() => navigateTo('home')}
+              className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#0891B2] transition-colors mb-8"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
+            </button>
+
+            {/* Hero Section */}
+            <div className="relative bg-gradient-to-br from-[#0891B2] to-[#065F73] rounded-2xl overflow-hidden mb-12">
+              <div className="px-8 md:px-16 py-16 md:py-20 relative z-10">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white/90 mb-4">
+                  <Fish className="w-3 h-3" />
+                  Our Story
+                </span>
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                  Why OceanCatch?
+                </h1>
+                <p className="text-base md:text-lg text-white/80 max-w-2xl leading-relaxed">
+                  We believe everyone deserves access to the freshest seafood. That&apos;s why we go straight from the ocean to your doorstep — no middlemen, no delays, no compromises.
+                </p>
+              </div>
+              <div className="absolute top-0 right-0 w-1/3 h-full opacity-10">
+                <svg viewBox="0 0 200 200" className="w-full h-full" fill="white">
+                  <path d="M100 20c-20 0-35 15-35 35 0 15 10 28 23 33l-5 32h34l-5-32c13-5 23-18 23-33 0-20-15-35-35-35zm-8 85h16l3-18c-3 1-7 2-11 2s-8-1-11-2l3 18zm8-50c-8 0-15-7-15-15s7-15 15-15 15 7 15 15-7 15-15 15z"/>
+                </svg>
+              </div>
+            </div>
+
+            {/* Our Beginning Section */}
+            <div className="mb-16">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 bg-[#CFFAFE] rounded-xl flex items-center justify-center">
+                  <span className="text-lg">🌊</span>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Our Beginning</h2>
+                  <p className="text-sm text-gray-500">Where it all started</p>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                  <div>
+                    <p className="text-gray-600 leading-relaxed mb-4">
+                      OceanCatch was born from a simple observation: the seafood on our plates often traveled through too many hands before reaching us. By the time it arrived, freshness was compromised and prices were inflated.
+                    </p>
+                    <p className="text-gray-600 leading-relaxed mb-4">
+                      Founded in 2020 in Kochi, Kerala — the heart of India&apos;s fishing coast — we set out to change that. We built direct relationships with local fishermen and created a supply chain that gets fish from the boat to your door in hours, not days.
+                    </p>
+                    <p className="text-gray-600 leading-relaxed">
+                      What started as a small operation serving Kochi has now grown into a trusted seafood brand delivering across Kerala, Karnataka, and Tamil Nadu — always with the same promise: <span className="font-semibold text-[#0891B2]">Definitely Fresh.</span>
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-[#CFFAFE] rounded-xl p-6 text-center">
+                      <p className="text-3xl font-bold text-[#0891B2]">2020</p>
+                      <p className="text-xs text-gray-600 mt-1">Founded</p>
+                    </div>
+                    <div className="bg-[#CFFAFE] rounded-xl p-6 text-center">
+                      <p className="text-3xl font-bold text-[#0891B2]">500+</p>
+                      <p className="text-xs text-gray-600 mt-1">Fishermen Partners</p>
+                    </div>
+                    <div className="bg-[#CFFAFE] rounded-xl p-6 text-center">
+                      <p className="text-3xl font-bold text-[#0891B2]">50K+</p>
+                      <p className="text-xs text-gray-600 mt-1">Happy Customers</p>
+                    </div>
+                    <div className="bg-[#CFFAFE] rounded-xl p-6 text-center">
+                      <p className="text-3xl font-bold text-[#0891B2]">3</p>
+                      <p className="text-xs text-gray-600 mt-1">States Served</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Our Features Section */}
+            <div className="mb-16">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 bg-[#CFFAFE] rounded-xl flex items-center justify-center">
+                  <span className="text-lg">⭐</span>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Our Features</h2>
+                  <p className="text-sm text-gray-500">What makes us different</p>
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  { icon: '🐟', title: 'Farm-Fresh Seafood', desc: 'Sourced directly from the ocean. No frozen stock, no cold storage — only fresh catch delivered the same day it lands on the boat.' },
+                  { icon: '⚡', title: 'Same Day Delivery', desc: 'Order before 10 AM and get your seafood delivered the same day. Our cold-chain logistics ensures everything stays fresh en route.' },
+                  { icon: '🔍', title: 'Quality Checked', desc: 'Every fish is hand-inspected by our quality team. We check for freshness, size, and quality before it reaches you.' },
+                  { icon: '💰', title: 'Fair Pricing', desc: 'By cutting out middlemen, we offer premium seafood at honest prices. You pay for the fish, not the supply chain.' },
+                  { icon: '📦', title: 'Hygienic Packing', desc: 'Vacuum-sealed and packed in food-grade materials. Our packaging preserves freshness and prevents contamination.' },
+                  { icon: '🤝', title: 'Fishermen First', desc: 'We pay our fishermen partners fairly and directly. Every purchase supports local coastal communities and sustainable fishing.' },
+                ].map((feature) => (
+                  <div key={feature.title} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+                    <div className="w-12 h-12 bg-[#CFFAFE] rounded-xl flex items-center justify-center mb-4">
+                      <span className="text-2xl">{feature.icon}</span>
+                    </div>
+                    <h3 className="text-base font-bold text-gray-900 mb-2">{feature.title}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">{feature.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Our Promise Section */}
+            <div className="mb-16">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 bg-[#CFFAFE] rounded-xl flex items-center justify-center">
+                  <span className="text-lg">🤝</span>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Our Promise</h2>
+                  <p className="text-sm text-gray-500">What we guarantee</p>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[
+                    { icon: ShieldCheck, title: '100% Fresh', desc: 'Or your money back' },
+                    { icon: Truck, title: 'On-Time Delivery', desc: 'Guaranteed delivery slot' },
+                    { icon: Scale, title: 'Right Weight', desc: 'What you order is what you get' },
+                    { icon: PhoneCall, title: '24/7 Support', desc: 'Call us anytime for help' },
+                  ].map((promise) => (
+                    <div key={promise.title} className="text-center p-4">
+                      <div className="w-14 h-14 mx-auto bg-[#0891B2] rounded-full flex items-center justify-center mb-3">
+                        <promise.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <h4 className="text-sm font-bold text-gray-900 mb-1">{promise.title}</h4>
+                      <p className="text-xs text-gray-500">{promise.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Section */}
+            <div className="bg-gradient-to-r from-[#0891B2] to-[#065F73] rounded-2xl p-8 md:p-12 text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                Ready to taste the difference?
+              </h2>
+              <p className="text-white/80 mb-6 max-w-lg mx-auto">
+                Call us now to place your order and experience the freshest seafood you&apos;ve ever had.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
+                  className="inline-flex items-center gap-2 bg-white text-[#0891B2] text-sm font-semibold px-8 py-3.5 rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  <PhoneCall className="w-4 h-4" />
+                  Call to Order
+                </a>
+                <button
+                  onClick={handleWhatsApp}
+                  className="inline-flex items-center gap-2 bg-[#25D366] text-white text-sm font-semibold px-8 py-3.5 rounded-xl hover:bg-[#1DA851] transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  WhatsApp Us
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : currentPage === 'home' ? (
           /* ===== HOME PAGE - PRODUCT GRID ===== */
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Category Filter Bar */}
@@ -742,7 +926,7 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-bold text-gray-900 mb-4">Quick Links</h4>
                 <ul className="space-y-2.5">
-                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Why OceanCatch?</a></li>
+                  <li><button onClick={() => navigateTo('story')} className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Why OceanCatch?</button></li>
                   <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">How OceanCatch?</a></li>
                   <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Reach Us</a></li>
                 </ul>
