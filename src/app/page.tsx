@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Search, ChevronDown, Phone, Mail, Facebook, Instagram, ArrowLeft, Package, CheckCircle, Clock, MapPin, Fish, Truck, Star, X, PhoneCall, MessageCircle, Info, Scale, Droplets, ShieldCheck } from 'lucide-react'
 import Image from 'next/image'
 
-type Page = 'home' | 'buyfish' | 'story'
+type Page = 'home' | 'buyfish' | 'story' | 'contact'
 
 interface OrderItem {
   id: number
@@ -190,8 +190,8 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const breadcrumbTitle = currentPage === 'home' ? 'Buy Fish' : currentPage === 'buyfish' ? 'My Orders' : 'Why OceanCatch'
-  const breadcrumbPath = currentPage === 'home' ? 'Buy Fish' : currentPage === 'buyfish' ? 'My Orders' : 'Why OceanCatch'
+  const breadcrumbTitle = currentPage === 'home' ? 'Buy Fish' : currentPage === 'buyfish' ? 'My Orders' : currentPage === 'story' ? 'Why OceanCatch' : 'Reach Us'
+  const breadcrumbPath = currentPage === 'home' ? 'Buy Fish' : currentPage === 'buyfish' ? 'My Orders' : currentPage === 'story' ? 'Why OceanCatch' : 'Reach Us'
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F7F7]">
@@ -284,9 +284,12 @@ export default function Home() {
                       </div>
                     )}
                   </div>
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors">
+                  <button
+                    onClick={() => navigateTo('contact')}
+                    className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors"
+                  >
                     Reach Us
-                  </a>
+                  </button>
                 </nav>
               </div>
               <div className="hidden sm:flex items-center gap-4">
@@ -312,7 +315,7 @@ export default function Home() {
                 Home
               </button>
               <span className="mx-2">/</span>
-              <button onClick={() => navigateTo(currentPage === 'story' ? 'story' : 'buyfish')} className="hover:text-[#0891B2] transition-colors text-gray-700">
+              <button onClick={() => navigateTo(currentPage === 'story' ? 'story' : currentPage === 'contact' ? 'contact' : 'buyfish')} className="hover:text-[#0891B2] transition-colors text-gray-700">
                 {breadcrumbPath}
               </button>
             </p>
@@ -454,7 +457,243 @@ export default function Home() {
 
       {/* ===== MAIN CONTENT ===== */}
       <main className="flex-1">
-        {currentPage === 'story' ? (
+        {currentPage === 'contact' ? (
+          /* ===== REACH US / CONTACT PAGE ===== */
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Back Button */}
+            <button
+              onClick={() => navigateTo('home')}
+              className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#0891B2] transition-colors mb-8"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
+            </button>
+
+            {/* Hero Section */}
+            <div className="relative bg-gradient-to-br from-[#0891B2] to-[#065F73] rounded-2xl overflow-hidden mb-12">
+              <div className="px-8 md:px-16 py-16 md:py-20 relative z-10">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white/90 mb-4">
+                  <Phone className="w-3 h-3" />
+                  Get In Touch
+                </span>
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                  Reach Us
+                </h1>
+                <p className="text-base md:text-lg text-white/80 max-w-2xl leading-relaxed">
+                  Have a question, want to place an order, or just want to say hello? We&apos;re always here to help. Reach out to us through any of the channels below.
+                </p>
+              </div>
+            </div>
+
+            {/* Contact Cards */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              {/* Phone */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition-shadow">
+                <div className="w-14 h-14 mx-auto bg-[#0891B2] rounded-full flex items-center justify-center mb-4">
+                  <Phone className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-sm font-bold text-gray-900 mb-1">Call Us</h3>
+                <a href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`} className="text-sm text-[#0891B2] font-semibold hover:underline">
+                  {COMPANY_PHONE}
+                </a>
+                <p className="text-xs text-gray-400 mt-2">Mon-Sat, 7AM - 9PM</p>
+              </div>
+
+              {/* WhatsApp */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition-shadow">
+                <div className="w-14 h-14 mx-auto bg-[#25D366] rounded-full flex items-center justify-center mb-4">
+                  <MessageCircle className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-sm font-bold text-gray-900 mb-1">WhatsApp</h3>
+                <button onClick={handleWhatsApp} className="text-sm text-[#25D366] font-semibold hover:underline">
+                  Chat with us
+                </button>
+                <p className="text-xs text-gray-400 mt-2">Quick response guaranteed</p>
+              </div>
+
+              {/* Email */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition-shadow">
+                <div className="w-14 h-14 mx-auto bg-[#0891B2] rounded-full flex items-center justify-center mb-4">
+                  <Mail className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-sm font-bold text-gray-900 mb-1">Email Us</h3>
+                <a href="mailto:customercare@oceancatch.in" className="text-sm text-[#0891B2] font-semibold hover:underline">
+                  customercare@oceancatch.in
+                </a>
+                <p className="text-xs text-gray-400 mt-2">We reply within 24 hours</p>
+              </div>
+
+              {/* Location */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition-shadow">
+                <div className="w-14 h-14 mx-auto bg-[#0891B2] rounded-full flex items-center justify-center mb-4">
+                  <MapPin className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-sm font-bold text-gray-900 mb-1">Visit Us</h3>
+                <p className="text-sm text-[#0891B2] font-semibold">
+                  Kochi, Kerala
+                </p>
+                <p className="text-xs text-gray-400 mt-2">By appointment only</p>
+              </div>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-8 mb-12">
+              {/* Contact Form */}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-[#CFFAFE] rounded-xl flex items-center justify-center">
+                    <span className="text-lg">✉️</span>
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">Send Us a Message</h2>
+                    <p className="text-sm text-gray-500">We&apos;ll get back to you shortly</p>
+                  </div>
+                </div>
+                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">Full Name</label>
+                      <input
+                        type="text"
+                        placeholder="Your name"
+                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">Phone Number</label>
+                      <input
+                        type="tel"
+                        placeholder="+91 XXXXX XXXXX"
+                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">Email Address</label>
+                    <input
+                      type="email"
+                      placeholder="you@example.com"
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">Subject</label>
+                    <select className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors text-gray-600">
+                      <option>Place an Order</option>
+                      <option>Order Inquiry</option>
+                      <option>Feedback</option>
+                      <option>Complaint</option>
+                      <option>Partnership</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">Message</label>
+                    <textarea
+                      rows={4}
+                      placeholder="Write your message here..."
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors resize-none"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-[#0891B2] hover:bg-[#0E7490] text-white text-sm font-semibold py-3 rounded-lg transition-colors"
+                  >
+                    Send Message
+                  </button>
+                </form>
+              </div>
+
+              {/* Location & Info */}
+              <div className="space-y-6">
+                {/* Map Placeholder */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="bg-gradient-to-br from-[#e0f2fe] to-[#bae6fd] h-56 flex items-center justify-center relative">
+                    <div className="text-center">
+                      <MapPin className="w-10 h-10 text-[#0891B2] mx-auto mb-2" />
+                      <p className="text-sm font-semibold text-[#0891B2]">OceanCatch HQ</p>
+                      <p className="text-xs text-gray-600">42, Marine Drive, Kochi, Kerala 682031</p>
+                    </div>
+                    {/* Decorative wave */}
+                    <div className="absolute bottom-0 left-0 right-0">
+                      <svg viewBox="0 0 1440 60" fill="none" className="w-full">
+                        <path d="M0 60V30C240 0 480 0 720 30C960 60 1200 60 1440 30V60H0Z" fill="white"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Business Hours */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-[#CFFAFE] rounded-xl flex items-center justify-center">
+                      <Clock className="w-5 h-5 text-[#0891B2]" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900">Business Hours</h3>
+                  </div>
+                  <div className="space-y-3">
+                    {[
+                      { day: 'Monday - Saturday', hours: '7:00 AM - 9:00 PM', active: true },
+                      { day: 'Sunday', hours: '8:00 AM - 2:00 PM', active: true },
+                      { day: 'Public Holidays', hours: 'Closed', active: false },
+                    ].map((schedule) => (
+                      <div key={schedule.day} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                        <span className="text-sm text-gray-700 font-medium">{schedule.day}</span>
+                        <span className={`text-sm font-semibold ${schedule.active ? 'text-[#0891B2]' : 'text-gray-400'}`}>{schedule.hours}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Social Media */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-[#CFFAFE] rounded-xl flex items-center justify-center">
+                      <span className="text-lg">🌐</span>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900">Follow Us</h3>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <a href="#" className="w-12 h-12 flex items-center justify-center rounded-full bg-[#1877F2] text-white hover:opacity-80 transition-opacity">
+                      <Facebook className="w-5 h-5" />
+                    </a>
+                    <a href="#" className="w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white hover:opacity-80 transition-opacity">
+                      <Instagram className="w-5 h-5" />
+                    </a>
+                    <a href="#" className="w-12 h-12 flex items-center justify-center rounded-full bg-[#25D366] text-white hover:opacity-80 transition-opacity">
+                      <MessageCircle className="w-5 h-5" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick CTA */}
+            <div className="bg-gradient-to-r from-[#0891B2] to-[#065F73] rounded-2xl p-8 md:p-12 text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                Prefer to talk directly?
+              </h2>
+              <p className="text-white/80 mb-6 max-w-lg mx-auto">
+                The fastest way to place an order or get help is to call us directly. Our team is standing by!
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
+                  className="inline-flex items-center gap-2 bg-white text-[#0891B2] text-sm font-semibold px-8 py-3.5 rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  <PhoneCall className="w-4 h-4" />
+                  Call Now
+                </a>
+                <button
+                  onClick={handleWhatsApp}
+                  className="inline-flex items-center gap-2 bg-[#25D366] text-white text-sm font-semibold px-8 py-3.5 rounded-xl hover:bg-[#1DA851] transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  WhatsApp Us
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : currentPage === 'story' ? (
           /* ===== WHY OCEANCATCH PAGE ===== */
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Back Button */}
@@ -928,7 +1167,7 @@ export default function Home() {
                 <ul className="space-y-2.5">
                   <li><button onClick={() => navigateTo('story')} className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Why OceanCatch?</button></li>
                   <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">How OceanCatch?</a></li>
-                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Reach Us</a></li>
+                  <li><button onClick={() => navigateTo('contact')} className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Reach Us</button></li>
                 </ul>
               </div>
 
