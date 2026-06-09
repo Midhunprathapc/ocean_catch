@@ -231,7 +231,7 @@ export default function Home() {
               {/* Logo */}
               <div className="flex-shrink-0 cursor-pointer" onClick={() => navigateTo('home')}>
                 <div className="flex flex-col items-start">
-                  <span className="text-2xl font-bold text-[#E55B5B] tracking-wide" style={{ fontFamily: 'var(--font-inter)' }}>
+                  <span className="text-2xl font-bold text-[#0891B2] tracking-wide" style={{ fontFamily: 'var(--font-inter)' }}>
                     OceanCatch
                   </span>
                   <span className="text-[10px] font-medium text-gray-500 tracking-[0.2em] -mt-1">
@@ -246,9 +246,9 @@ export default function Home() {
                   <input
                     type="text"
                     placeholder="Search product..."
-                    className="flex-1 px-4 py-2.5 border border-gray-300 rounded-l-lg text-sm focus:outline-none focus:border-[#E55B5B] transition-colors"
+                    className="flex-1 px-4 py-2.5 border border-gray-300 rounded-l-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors"
                   />
-                  <button className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white px-5 py-2.5 rounded-r-lg transition-colors">
+                  <button className="bg-[#0891B2] hover:bg-[#0E7490] text-white px-5 py-2.5 rounded-r-lg transition-colors">
                     <Search className="w-5 h-5" />
                   </button>
                 </div>
@@ -256,16 +256,16 @@ export default function Home() {
 
               {/* User Actions */}
               <div className="flex items-center gap-4 flex-shrink-0">
-                <a href="#" className="text-xs font-semibold text-gray-600 hover:text-[#E55B5B] transition-colors tracking-wide">
+                <a href="#" className="text-xs font-semibold text-gray-600 hover:text-[#0891B2] transition-colors tracking-wide">
                   SIGNUP / LOGIN
                 </a>
                 <button
                   onClick={() => navigateTo('buyfish')}
-                  className="relative text-gray-600 hover:text-[#E55B5B] transition-colors"
+                  className="relative text-gray-600 hover:text-[#0891B2] transition-colors"
                 >
                   <ShoppingCart className="w-6 h-6" />
                   {totalItems > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-[#E55B5B] text-white text-[10px] font-bold min-w-4 h-4 flex items-center justify-center rounded-full px-0.5">
+                    <span className="absolute -top-2 -right-2 bg-[#0891B2] text-white text-[10px] font-bold min-w-4 h-4 flex items-center justify-center rounded-full px-0.5">
                       {totalItems}
                     </span>
                   )}
@@ -283,7 +283,7 @@ export default function Home() {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => navigateTo('buyfish')}
-                    className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors"
+                    className="bg-[#0891B2] hover:bg-[#0E7490] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors"
                   >
                     <Fish className="w-4 h-4" />
                     Buy Fish
@@ -292,15 +292,15 @@ export default function Home() {
                 <nav className="flex items-center gap-6">
                   <button
                     onClick={() => navigateTo('home')}
-                    className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors"
+                    className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors"
                   >
                     Buy Now
                   </button>
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors flex items-center gap-1">
+                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors flex items-center gap-1">
                     Salmon&apos;s Story
                     <ChevronDown className="w-3 h-3" />
                   </a>
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors">
+                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors">
                     Reach Us
                   </a>
                 </nav>
@@ -324,11 +324,11 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
             <h1 className="text-lg font-bold text-gray-800 mb-1">{breadcrumbTitle}</h1>
             <p className="text-sm text-gray-500">
-              <button onClick={() => navigateTo('home')} className="hover:text-[#E55B5B] transition-colors">
+              <button onClick={() => navigateTo('home')} className="hover:text-[#0891B2] transition-colors">
                 Home
               </button>
               <span className="mx-2">/</span>
-              <button onClick={() => navigateTo('buyfish')} className="hover:text-[#E55B5B] transition-colors text-gray-700">
+              <button onClick={() => navigateTo('buyfish')} className="hover:text-[#0891B2] transition-colors text-gray-700">
                 {breadcrumbPath}
               </button>
             </p>
@@ -344,7 +344,7 @@ export default function Home() {
         </div>
       )}
       {orderToast && (
-        <div className="fixed top-4 right-4 z-50 bg-[#E55B5B] text-white px-5 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-right duration-300">
+        <div className="fixed top-4 right-4 z-50 bg-[#0891B2] text-white px-5 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-right duration-300">
           <CheckCircle className="w-5 h-5" />
           <div className="text-sm font-medium">
             Order {orderToast} placed successfully!
@@ -370,8 +370,8 @@ export default function Home() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                       selectedCategory === cat
-                        ? 'bg-[#E55B5B] text-white shadow-md shadow-[#E55B5B]/20'
-                        : 'bg-white text-gray-600 border border-gray-200 hover:border-[#E55B5B] hover:text-[#E55B5B]'
+                        ? 'bg-[#0891B2] text-white shadow-md shadow-[#0891B2]/20'
+                        : 'bg-white text-gray-600 border border-gray-200 hover:border-[#0891B2] hover:text-[#0891B2]'
                     }`}
                   >
                     {cat}
@@ -385,7 +385,7 @@ export default function Home() {
               <p className="text-sm text-gray-500">
                 Showing <span className="font-semibold text-gray-800">{filteredProducts.length}</span> products
                 {selectedCategory !== 'All Fish' && (
-                  <span> in <span className="font-semibold text-[#E55B5B]">{selectedCategory}</span></span>
+                  <span> in <span className="font-semibold text-[#0891B2]">{selectedCategory}</span></span>
                 )}
               </p>
             </div>
@@ -408,7 +408,7 @@ export default function Home() {
                         sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       />
                       {inCart && (
-                        <div className="absolute top-2 right-2 bg-[#E55B5B] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        <div className="absolute top-2 right-2 bg-[#0891B2] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                           {inCart.quantity} in cart
                         </div>
                       )}
@@ -422,7 +422,7 @@ export default function Home() {
                       <p className="text-xs text-gray-400 font-medium tracking-wider mb-2">
                         {product.category}
                       </p>
-                      <p className="text-base font-bold text-[#E55B5B]">
+                      <p className="text-base font-bold text-[#0891B2]">
                         ₹ {product.price.toFixed(2)}/kg
                       </p>
                       {product.originalPrice && (
@@ -436,14 +436,14 @@ export default function Home() {
                         <div className="mt-3 flex items-center justify-center gap-3">
                           <button
                             onClick={() => updateQuantity(product.id, -1)}
-                            className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:border-[#E55B5B] hover:text-[#E55B5B] transition-colors"
+                            className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:border-[#0891B2] hover:text-[#0891B2] transition-colors"
                           >
                             <Minus className="w-3.5 h-3.5" />
                           </button>
                           <span className="text-sm font-bold text-gray-800 w-6 text-center">{inCart.quantity}</span>
                           <button
                             onClick={() => updateQuantity(product.id, 1)}
-                            className="w-8 h-8 flex items-center justify-center rounded-full bg-[#E55B5B] text-white hover:bg-[#D04A4A] transition-colors"
+                            className="w-8 h-8 flex items-center justify-center rounded-full bg-[#0891B2] text-white hover:bg-[#0E7490] transition-colors"
                           >
                             <Plus className="w-3.5 h-3.5" />
                           </button>
@@ -451,7 +451,7 @@ export default function Home() {
                       ) : (
                         <button
                           onClick={() => addToCart(product.id)}
-                          className="mt-3 w-full bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors"
+                          className="mt-3 w-full bg-[#0891B2] hover:bg-[#0E7490] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors"
                         >
                           Add to Cart
                         </button>
@@ -476,7 +476,7 @@ export default function Home() {
             {/* Back Button */}
             <button
               onClick={() => navigateTo('home')}
-              className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#E55B5B] transition-colors mb-6"
+              className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#0891B2] transition-colors mb-6"
             >
               <ArrowLeft className="w-4 h-4" />
               Continue Shopping
@@ -488,7 +488,7 @@ export default function Home() {
                 onClick={() => setActiveBuyTab('cart')}
                 className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
                   activeBuyTab === 'cart'
-                    ? 'bg-[#E55B5B] text-white shadow-md'
+                    ? 'bg-[#0891B2] text-white shadow-md'
                     : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -496,7 +496,7 @@ export default function Home() {
                 My Cart
                 {cart.length > 0 && (
                   <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                    activeBuyTab === 'cart' ? 'bg-white/20' : 'bg-[#FDE8E8] text-[#E55B5B]'
+                    activeBuyTab === 'cart' ? 'bg-white/20' : 'bg-[#CFFAFE] text-[#0891B2]'
                   }`}>
                     {totalItems}
                   </span>
@@ -506,7 +506,7 @@ export default function Home() {
                 onClick={() => setActiveBuyTab('orders')}
                 className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
                   activeBuyTab === 'orders'
-                    ? 'bg-[#E55B5B] text-white shadow-md'
+                    ? 'bg-[#0891B2] text-white shadow-md'
                     : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -514,7 +514,7 @@ export default function Home() {
                 My Orders
                 {purchasedOrders.length > 0 && (
                   <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                    activeBuyTab === 'orders' ? 'bg-white/20' : 'bg-[#FDE8E8] text-[#E55B5B]'
+                    activeBuyTab === 'orders' ? 'bg-white/20' : 'bg-[#CFFAFE] text-[#0891B2]'
                   }`}>
                     {purchasedOrders.length}
                   </span>
@@ -526,8 +526,8 @@ export default function Home() {
               /* ===== CART TAB ===== */
               cart.length === 0 ? (
                 <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
-                  <div className="w-24 h-24 mx-auto bg-[#FDE8E8] rounded-full flex items-center justify-center mb-6">
-                    <ShoppingBag className="w-12 h-12 text-[#E55B5B] opacity-50" />
+                  <div className="w-24 h-24 mx-auto bg-[#CFFAFE] rounded-full flex items-center justify-center mb-6">
+                    <ShoppingBag className="w-12 h-12 text-[#0891B2] opacity-50" />
                   </div>
                   <h2 className="text-xl font-bold text-gray-800 mb-2">Your cart is empty</h2>
                   <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">
@@ -535,7 +535,7 @@ export default function Home() {
                   </p>
                   <button
                     onClick={() => navigateTo('home')}
-                    className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold px-8 py-3 rounded-lg transition-colors"
+                    className="bg-[#0891B2] hover:bg-[#0E7490] text-white text-sm font-semibold px-8 py-3 rounded-lg transition-colors"
                   >
                     Browse Fish
                   </button>
@@ -586,14 +586,14 @@ export default function Home() {
                                 <div className="flex items-center gap-2">
                                   <button
                                     onClick={() => updateQuantity(item.id, -1)}
-                                    className="w-7 h-7 flex items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:border-[#E55B5B] hover:text-[#E55B5B] transition-colors"
+                                    className="w-7 h-7 flex items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:border-[#0891B2] hover:text-[#0891B2] transition-colors"
                                   >
                                     <Minus className="w-3 h-3" />
                                   </button>
                                   <span className="text-sm font-bold text-gray-800 w-6 text-center">{item.quantity}</span>
                                   <button
                                     onClick={() => updateQuantity(item.id, 1)}
-                                    className="w-7 h-7 flex items-center justify-center rounded-md bg-[#E55B5B] text-white hover:bg-[#D04A4A] transition-colors"
+                                    className="w-7 h-7 flex items-center justify-center rounded-md bg-[#0891B2] text-white hover:bg-[#0E7490] transition-colors"
                                   >
                                     <Plus className="w-3 h-3" />
                                   </button>
@@ -602,7 +602,7 @@ export default function Home() {
 
                                 {/* Price */}
                                 <div className="text-right">
-                                  <p className="text-base font-bold text-[#E55B5B]">
+                                  <p className="text-base font-bold text-[#0891B2]">
                                     ₹ {(item.price * item.quantity).toFixed(2)}
                                   </p>
                                   {item.quantity > 1 && (
@@ -644,13 +644,13 @@ export default function Home() {
                       <div className="border-t border-gray-100 pt-4 mb-6">
                         <div className="flex justify-between">
                           <span className="text-base font-bold text-gray-800">Total</span>
-                          <span className="text-xl font-bold text-[#E55B5B]">₹ {totalPrice.toFixed(2)}</span>
+                          <span className="text-xl font-bold text-[#0891B2]">₹ {totalPrice.toFixed(2)}</span>
                         </div>
                       </div>
 
                       <button
                         onClick={placeOrder}
-                        className="w-full bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold py-3.5 rounded-lg transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-[#0891B2] hover:bg-[#0E7490] text-white text-sm font-semibold py-3.5 rounded-lg transition-colors flex items-center justify-center gap-2"
                       >
                         <CreditCard className="w-4 h-4" />
                         Place Order
@@ -658,7 +658,7 @@ export default function Home() {
 
                       <button
                         onClick={() => navigateTo('home')}
-                        className="w-full mt-3 border border-gray-300 hover:border-[#E55B5B] text-gray-700 hover:text-[#E55B5B] text-sm font-medium py-3 rounded-lg transition-colors"
+                        className="w-full mt-3 border border-gray-300 hover:border-[#0891B2] text-gray-700 hover:text-[#0891B2] text-sm font-medium py-3 rounded-lg transition-colors"
                       >
                         Continue Shopping
                       </button>
@@ -673,7 +673,7 @@ export default function Home() {
                           </div>
                         </div>
                         <div className="flex items-start gap-2">
-                          <MapPin className="w-4 h-4 text-[#E55B5B] mt-0.5 flex-shrink-0" />
+                          <MapPin className="w-4 h-4 text-[#0891B2] mt-0.5 flex-shrink-0" />
                           <div>
                             <p className="text-xs font-semibold text-gray-700">Delivering to</p>
                             <p className="text-[11px] text-gray-400">42, Marine Drive, Kochi</p>
@@ -688,8 +688,8 @@ export default function Home() {
               /* ===== ORDERS / PURCHASED FISH TAB ===== */
               purchasedOrders.length === 0 ? (
                 <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
-                  <div className="w-24 h-24 mx-auto bg-[#FDE8E8] rounded-full flex items-center justify-center mb-6">
-                    <Package className="w-12 h-12 text-[#E55B5B] opacity-50" />
+                  <div className="w-24 h-24 mx-auto bg-[#CFFAFE] rounded-full flex items-center justify-center mb-6">
+                    <Package className="w-12 h-12 text-[#0891B2] opacity-50" />
                   </div>
                   <h2 className="text-xl font-bold text-gray-800 mb-2">No orders yet</h2>
                   <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">
@@ -697,7 +697,7 @@ export default function Home() {
                   </p>
                   <button
                     onClick={() => navigateTo('home')}
-                    className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold px-8 py-3 rounded-lg transition-colors"
+                    className="bg-[#0891B2] hover:bg-[#0E7490] text-white text-sm font-semibold px-8 py-3 rounded-lg transition-colors"
                   >
                     Start Shopping
                   </button>
@@ -739,7 +739,7 @@ export default function Home() {
 
                             <div className="flex items-center gap-6">
                               <div className="text-right">
-                                <p className="text-sm font-bold text-[#E55B5B]">₹ {order.totalPrice.toFixed(2)}</p>
+                                <p className="text-sm font-bold text-[#0891B2]">₹ {order.totalPrice.toFixed(2)}</p>
                                 <p className="text-xs text-gray-400">{order.items.length} type{order.items.length !== 1 ? 's' : ''} · {order.totalItems} kg</p>
                               </div>
                               <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
@@ -754,11 +754,11 @@ export default function Home() {
                               return (
                                 <div key={step} className="flex-1 flex items-center gap-1">
                                   <div className={`h-1.5 flex-1 rounded-full transition-all ${
-                                    isCompleted ? 'bg-[#E55B5B]' : 'bg-gray-200'
+                                    isCompleted ? 'bg-[#0891B2]' : 'bg-gray-200'
                                   } ${isCurrent ? 'animate-pulse' : ''}`} />
                                   {i < 3 && (
                                     <div className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${
-                                      isCompleted ? 'bg-[#E55B5B]' : 'bg-gray-200'
+                                      isCompleted ? 'bg-[#0891B2]' : 'bg-gray-200'
                                     }`} />
                                   )}
                                 </div>
@@ -816,7 +816,7 @@ export default function Home() {
                                       <span>ETA: {new Date(order.deliveryDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
                                     </div>
                                   )}
-                                  <button className="text-xs font-semibold text-[#E55B5B] hover:text-[#D04A4A] transition-colors flex items-center gap-1">
+                                  <button className="text-xs font-semibold text-[#0891B2] hover:text-[#0E7490] transition-colors flex items-center gap-1">
                                     <Star className="w-3 h-3" />
                                     Rate Order
                                   </button>
@@ -844,7 +844,7 @@ export default function Home() {
               {/* Column 1: Logo */}
               <div className="sm:col-span-2 lg:col-span-1">
                 <div className="flex flex-col items-start cursor-pointer" onClick={() => navigateTo('home')}>
-                  <span className="text-2xl font-bold text-[#E55B5B] tracking-wide">
+                  <span className="text-2xl font-bold text-[#0891B2] tracking-wide">
                     OceanCatch
                   </span>
                   <span className="text-[10px] font-medium text-gray-500 tracking-[0.2em] -mt-1">
@@ -860,9 +860,9 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-bold text-gray-900 mb-4">Quick Links</h4>
                 <ul className="space-y-2.5">
-                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Why OceanCatch?</a></li>
-                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">How OceanCatch?</a></li>
-                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Reach Us</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Why OceanCatch?</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">How OceanCatch?</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Reach Us</a></li>
                 </ul>
               </div>
 
@@ -870,9 +870,9 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-bold text-gray-900 mb-4">Policies</h4>
                 <ul className="space-y-2.5">
-                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Terms &amp; Conditions</a></li>
-                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Privacy Policy</a></li>
-                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Refund Policy</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Terms &amp; Conditions</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Privacy Policy</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Refund Policy</a></li>
                 </ul>
               </div>
 
@@ -922,7 +922,7 @@ export default function Home() {
         </div>
 
         {/* Bottom Footer Tier */}
-        <div className="bg-[#E55B5B]">
+        <div className="bg-[#0891B2]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-xs text-white/90">

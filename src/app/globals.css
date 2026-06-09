@@ -40,9 +40,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-coral: #E55B5B;
-  --color-coral-dark: #D04A4A;
-  --color-coral-light: #FDE8E8;
+  --color-ocean: #0891B2;
+  --color-ocean-dark: #0E7490;
+  --color-ocean-light: #CFFAFE;
 }
 
 :root {
