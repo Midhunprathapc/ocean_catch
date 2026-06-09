@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Search, ShoppingCart, ChevronDown, Phone, Mail, Facebook, Instagram, Plus, Minus, Trash2, ArrowLeft, Package, CheckCircle } from 'lucide-react'
+import { Search, ShoppingCart, ChevronDown, Phone, Mail, Facebook, Instagram, Plus, Minus, Trash2, ArrowLeft, Package, CheckCircle, Clock, MapPin, CreditCard, ShoppingBag, Fish, Truck, Star, X } from 'lucide-react'
 import Image from 'next/image'
 
 type Page = 'home' | 'buyfish'
@@ -14,6 +14,17 @@ interface CartItem {
   originalPrice: number | null
   image: string
   quantity: number
+}
+
+interface PurchasedOrder {
+  id: string
+  items: CartItem[]
+  totalPrice: number
+  totalItems: number
+  orderDate: string
+  status: 'Confirmed' | 'Processing' | 'Shipped' | 'Delivered'
+  deliveryDate: string
+  address: string
 }
 
 const products = [
@@ -32,6 +43,7 @@ const products = [
 ]
 
 const fishCategories = [
+  'All Fish',
   'Seawater Fish',
   'Backwater Fish',
   'Freshwater Fish',
@@ -42,15 +54,88 @@ const fishCategories = [
   'Live Fish',
 ]
 
+const categoryToFilter: Record<string, string> = {
+  'All Fish': 'ALL',
+  'Seawater Fish': 'SEA WATER FISH',
+  'Backwater Fish': 'BACKWATER FISH',
+  'Freshwater Fish': 'FRESHWATER FISH',
+  'Shelled Fish': 'SHELLED FISH',
+  'Imported Fish': 'IMPORTED FISH',
+  'Exotic Indian': 'EXOTIC INDIAN',
+  'Ready To Cook': 'READY TO COOK',
+  'Live Fish': 'LIVE FISH',
+}
+
+const statusConfig: Record<string, { color: string; bg: string; icon: typeof Clock }> = {
+  Confirmed: { color: 'text-blue-700', bg: 'bg-blue-50 border-blue-200', icon: CheckCircle },
+  Processing: { color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', icon: Clock },
+  Shipped: { color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', icon: Truck },
+  Delivered: { color: 'text-green-700', bg: 'bg-green-50 border-green-200', icon: CheckCircle },
+}
+
+// Generate mock past orders for demo
+function generateMockOrders(): PurchasedOrder[] {
+  return [
+    {
+      id: 'SAL-2024-0847',
+      items: [
+        { ...products[2], quantity: 2 },
+        { ...products[4], quantity: 1 },
+      ],
+      totalPrice: 2500,
+      totalItems: 3,
+      orderDate: '2024-12-28',
+      status: 'Delivered',
+      deliveryDate: '2024-12-29',
+      address: '42, Marine Drive, Kochi, Kerala 682031',
+    },
+    {
+      id: 'SAL-2024-0923',
+      items: [
+        { ...products[3], quantity: 1 },
+        { ...products[7], quantity: 2 },
+      ],
+      totalPrice: 1470,
+      totalItems: 3,
+      orderDate: '2025-01-05',
+      status: 'Shipped',
+      deliveryDate: '2025-01-07',
+      address: '15, MG Road, Thiruvananthapuram, Kerala 695001',
+    },
+    {
+      id: 'SAL-2025-0102',
+      items: [
+        { ...products[9], quantity: 1 },
+        { ...products[0], quantity: 1 },
+      ],
+      totalPrice: 1070,
+      totalItems: 2,
+      orderDate: '2025-03-02',
+      status: 'Processing',
+      deliveryDate: '2025-03-04',
+      address: '8, Church Street, Bengaluru, Karnataka 560001',
+    },
+  ]
+}
+
 export default function Home() {
   const [currentPage, setCurrentPage] = useState<Page>('home')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [cart, setCart] = useState<CartItem[]>([])
+  const [purchasedOrders, setPurchasedOrders] = useState<PurchasedOrder[]>(generateMockOrders())
   const [addedToast, setAddedToast] = useState<string | null>(null)
+  const [orderToast, setOrderToast] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState('All Fish')
+  const [activeBuyTab, setActiveBuyTab] = useState<'cart' | 'orders'>('cart')
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+
+  const filteredProducts = selectedCategory === 'All Fish'
+    ? products
+    : products.filter((p) => p.category === categoryToFilter[selectedCategory])
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -68,6 +153,13 @@ export default function Home() {
       return () => clearTimeout(timer)
     }
   }, [addedToast])
+
+  useEffect(() => {
+    if (orderToast) {
+      const timer = setTimeout(() => setOrderToast(null), 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [orderToast])
 
   function addToCart(productId: number) {
     const product = products.find((p) => p.id === productId)
@@ -97,6 +189,26 @@ export default function Home() {
 
   function removeFromCart(productId: number) {
     setCart((prev) => prev.filter((item) => item.id !== productId))
+  }
+
+  function placeOrder() {
+    if (cart.length === 0) return
+
+    const newOrder: PurchasedOrder = {
+      id: `SAL-2025-${String(Math.floor(Math.random() * 9000) + 1000)}`,
+      items: [...cart],
+      totalPrice,
+      totalItems,
+      orderDate: new Date().toISOString().split('T')[0],
+      status: 'Confirmed',
+      deliveryDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      address: '42, Marine Drive, Kochi, Kerala 682031',
+    }
+
+    setPurchasedOrders((prev) => [newOrder, ...prev])
+    setOrderToast(newOrder.id)
+    setCart([])
+    setActiveBuyTab('orders')
   }
 
   function navigateTo(page: Page) {
@@ -170,26 +282,12 @@ export default function Home() {
               <div className="flex items-center gap-6">
                 <div className="relative" ref={dropdownRef}>
                   <button
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    onClick={() => navigateTo('buyfish')}
                     className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors"
                   >
+                    <Fish className="w-4 h-4" />
                     Buy Fish
-                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
-                  {isDropdownOpen && (
-                    <div className="absolute top-full left-0 mt-0 w-52 bg-white rounded-b-md shadow-lg border-t-2 border-[#E55B5B] z-50 py-1">
-                      {fishCategories.map((category) => (
-                        <a
-                          key={category}
-                          href="#"
-                          onClick={(e) => { e.preventDefault(); setIsDropdownOpen(false) }}
-                          className="block px-5 py-2.5 text-sm text-gray-700 hover:bg-[#FDE8E8] hover:text-[#E55B5B] transition-colors"
-                        >
-                          {category}
-                        </a>
-                      ))}
-                    </div>
-                  )}
                 </div>
                 <nav className="flex items-center gap-6">
                   <button
@@ -236,11 +334,23 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ===== TOAST NOTIFICATION ===== */}
+      {/* ===== TOAST NOTIFICATIONS ===== */}
       {addedToast && (
         <div className="fixed top-4 right-4 z-50 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-right duration-300">
           <CheckCircle className="w-5 h-5" />
           <span className="text-sm font-medium">{addedToast} added to cart!</span>
+        </div>
+      )}
+      {orderToast && (
+        <div className="fixed top-4 right-4 z-50 bg-[#E55B5B] text-white px-5 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-right duration-300">
+          <CheckCircle className="w-5 h-5" />
+          <div className="text-sm font-medium">
+            Order {orderToast} placed successfully!
+            <p className="text-xs text-white/80 mt-0.5">Your fresh catch is on its way 🐟</p>
+          </div>
+          <button onClick={() => setOrderToast(null)} className="ml-2 text-white/80 hover:text-white">
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
 
@@ -249,8 +359,37 @@ export default function Home() {
         {currentPage === 'home' ? (
           /* ===== HOME PAGE - PRODUCT GRID ===== */
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Category Filter Bar */}
+            <div className="mb-8">
+              <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                {fishCategories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      selectedCategory === cat
+                        ? 'bg-[#E55B5B] text-white shadow-md shadow-[#E55B5B]/20'
+                        : 'bg-white text-gray-600 border border-gray-200 hover:border-[#E55B5B] hover:text-[#E55B5B]'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Products count */}
+            <div className="flex items-center justify-between mb-6">
+              <p className="text-sm text-gray-500">
+                Showing <span className="font-semibold text-gray-800">{filteredProducts.length}</span> products
+                {selectedCategory !== 'All Fish' && (
+                  <span> in <span className="font-semibold text-[#E55B5B]">{selectedCategory}</span></span>
+                )}
+              </p>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {products.map((product) => {
+              {filteredProducts.map((product) => {
                 const inCart = cart.find((item) => item.id === product.id)
                 return (
                   <div
@@ -320,9 +459,17 @@ export default function Home() {
                 )
               })}
             </div>
+
+            {filteredProducts.length === 0 && (
+              <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
+                <Fish className="w-16 h-16 mx-auto text-gray-200 mb-4" />
+                <h3 className="text-lg font-bold text-gray-600 mb-2">No fish found</h3>
+                <p className="text-sm text-gray-400">Try selecting a different category</p>
+              </div>
+            )}
           </div>
         ) : (
-          /* ===== MY FISHES PAGE - CART / PURCHASED ITEMS ===== */
+          /* ===== MY FISHES PAGE - CART & PURCHASED ORDERS ===== */
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Back Button */}
             <button
@@ -333,144 +480,354 @@ export default function Home() {
               Continue Shopping
             </button>
 
-            {cart.length === 0 ? (
-              /* Empty Cart State */
-              <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
-                <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-6">
-                  <Package className="w-12 h-12 text-gray-300" />
+            {/* Tab Switcher */}
+            <div className="flex items-center gap-1 bg-white rounded-xl p-1.5 shadow-sm mb-8 w-fit">
+              <button
+                onClick={() => setActiveBuyTab('cart')}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                  activeBuyTab === 'cart'
+                    ? 'bg-[#E55B5B] text-white shadow-md'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                <ShoppingCart className="w-4 h-4" />
+                My Cart
+                {cart.length > 0 && (
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                    activeBuyTab === 'cart' ? 'bg-white/20' : 'bg-[#FDE8E8] text-[#E55B5B]'
+                  }`}>
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => setActiveBuyTab('orders')}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                  activeBuyTab === 'orders'
+                    ? 'bg-[#E55B5B] text-white shadow-md'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                <Package className="w-4 h-4" />
+                My Orders
+                {purchasedOrders.length > 0 && (
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                    activeBuyTab === 'orders' ? 'bg-white/20' : 'bg-[#FDE8E8] text-[#E55B5B]'
+                  }`}>
+                    {purchasedOrders.length}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {activeBuyTab === 'cart' ? (
+              /* ===== CART TAB ===== */
+              cart.length === 0 ? (
+                <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
+                  <div className="w-24 h-24 mx-auto bg-[#FDE8E8] rounded-full flex items-center justify-center mb-6">
+                    <ShoppingBag className="w-12 h-12 text-[#E55B5B] opacity-50" />
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-800 mb-2">Your cart is empty</h2>
+                  <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">
+                    Looks like you haven&apos;t added any fish to your cart yet. Browse our fresh selection and add your favorites!
+                  </p>
+                  <button
+                    onClick={() => navigateTo('home')}
+                    className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold px-8 py-3 rounded-lg transition-colors"
+                  >
+                    Browse Fish
+                  </button>
                 </div>
-                <h2 className="text-xl font-bold text-gray-800 mb-2">Your cart is empty</h2>
-                <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">
-                  Looks like you haven&apos;t added any fish to your cart yet. Browse our fresh selection and add your favorites!
-                </p>
-                <button
-                  onClick={() => navigateTo('home')}
-                  className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold px-8 py-3 rounded-lg transition-colors"
-                >
-                  Browse Fish
-                </button>
-              </div>
-            ) : (
-              <div className="flex flex-col lg:flex-row gap-8">
-                {/* Cart Items */}
-                <div className="flex-1">
-                  <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-100">
-                      <h2 className="text-lg font-bold text-gray-800">
-                        My Fishes
-                        <span className="ml-2 text-sm font-normal text-gray-500">({totalItems} item{totalItems !== 1 ? 's' : ''})</span>
-                      </h2>
-                    </div>
+              ) : (
+                <div className="flex flex-col lg:flex-row gap-8">
+                  {/* Cart Items */}
+                  <div className="flex-1">
+                    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                      <div className="px-6 py-4 border-b border-gray-100">
+                        <h2 className="text-lg font-bold text-gray-800">
+                          Cart Items
+                          <span className="ml-2 text-sm font-normal text-gray-500">({totalItems} item{totalItems !== 1 ? 's' : ''})</span>
+                        </h2>
+                      </div>
 
-                    <div className="divide-y divide-gray-100">
-                      {cart.map((item) => (
-                        <div key={item.id} className="p-4 sm:p-6 flex gap-4">
-                          {/* Item Image */}
-                          <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gray-50">
-                            <Image
-                              src={item.image}
-                              alt={item.title}
-                              fill
-                              className="object-cover"
-                              sizes="96px"
-                            />
-                          </div>
-
-                          {/* Item Details */}
-                          <div className="flex-1 min-w-0">
-                            <div className="flex justify-between items-start gap-2">
-                              <div>
-                                <h3 className="text-sm font-bold text-gray-900 tracking-wide">{item.title}</h3>
-                                <p className="text-xs text-gray-400 font-medium tracking-wider mt-0.5">{item.category}</p>
-                              </div>
-                              <button
-                                onClick={() => removeFromCart(item.id)}
-                                className="text-gray-400 hover:text-red-500 transition-colors p-1"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                      <div className="divide-y divide-gray-100">
+                        {cart.map((item) => (
+                          <div key={item.id} className="p-4 sm:p-6 flex gap-4">
+                            {/* Item Image */}
+                            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gray-50">
+                              <Image
+                                src={item.image}
+                                alt={item.title}
+                                fill
+                                className="object-cover"
+                                sizes="96px"
+                              />
                             </div>
 
-                            <div className="flex items-end justify-between mt-3">
-                              {/* Quantity Controls */}
-                              <div className="flex items-center gap-2">
+                            {/* Item Details */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex justify-between items-start gap-2">
+                                <div>
+                                  <h3 className="text-sm font-bold text-gray-900 tracking-wide">{item.title}</h3>
+                                  <p className="text-xs text-gray-400 font-medium tracking-wider mt-0.5">{item.category}</p>
+                                </div>
                                 <button
-                                  onClick={() => updateQuantity(item.id, -1)}
-                                  className="w-7 h-7 flex items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:border-[#E55B5B] hover:text-[#E55B5B] transition-colors"
+                                  onClick={() => removeFromCart(item.id)}
+                                  className="text-gray-400 hover:text-red-500 transition-colors p-1"
                                 >
-                                  <Minus className="w-3 h-3" />
+                                  <Trash2 className="w-4 h-4" />
                                 </button>
-                                <span className="text-sm font-bold text-gray-800 w-6 text-center">{item.quantity}</span>
-                                <button
-                                  onClick={() => updateQuantity(item.id, 1)}
-                                  className="w-7 h-7 flex items-center justify-center rounded-md bg-[#E55B5B] text-white hover:bg-[#D04A4A] transition-colors"
-                                >
-                                  <Plus className="w-3 h-3" />
-                                </button>
-                                <span className="text-xs text-gray-400 ml-1">kg</span>
                               </div>
 
-                              {/* Price */}
-                              <div className="text-right">
-                                <p className="text-base font-bold text-[#E55B5B]">
-                                  ₹ {(item.price * item.quantity).toFixed(2)}
-                                </p>
-                                {item.quantity > 1 && (
-                                  <p className="text-xs text-gray-400">
-                                    ₹ {item.price.toFixed(2)}/kg
+                              <div className="flex items-end justify-between mt-3">
+                                {/* Quantity Controls */}
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    onClick={() => updateQuantity(item.id, -1)}
+                                    className="w-7 h-7 flex items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:border-[#E55B5B] hover:text-[#E55B5B] transition-colors"
+                                  >
+                                    <Minus className="w-3 h-3" />
+                                  </button>
+                                  <span className="text-sm font-bold text-gray-800 w-6 text-center">{item.quantity}</span>
+                                  <button
+                                    onClick={() => updateQuantity(item.id, 1)}
+                                    className="w-7 h-7 flex items-center justify-center rounded-md bg-[#E55B5B] text-white hover:bg-[#D04A4A] transition-colors"
+                                  >
+                                    <Plus className="w-3 h-3" />
+                                  </button>
+                                  <span className="text-xs text-gray-400 ml-1">kg</span>
+                                </div>
+
+                                {/* Price */}
+                                <div className="text-right">
+                                  <p className="text-base font-bold text-[#E55B5B]">
+                                    ₹ {(item.price * item.quantity).toFixed(2)}
                                   </p>
-                                )}
+                                  {item.quantity > 1 && (
+                                    <p className="text-xs text-gray-400">
+                                      ₹ {item.price.toFixed(2)}/kg
+                                    </p>
+                                  )}
+                                </div>
                               </div>
                             </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Order Summary Sidebar */}
+                  <div className="lg:w-80">
+                    <div className="bg-white rounded-2xl shadow-sm p-6 sticky top-[200px]">
+                      <h2 className="text-lg font-bold text-gray-800 mb-4">Order Summary</h2>
+
+                      <div className="space-y-3 mb-4">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Subtotal ({totalItems} kg)</span>
+                          <span className="text-gray-800 font-medium">₹ {totalPrice.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Delivery</span>
+                          <span className="text-green-600 font-medium">FREE</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Savings</span>
+                          <span className="text-green-600 font-medium">
+                            - ₹ {cart.reduce((sum, item) => sum + (item.originalPrice ? (item.originalPrice - item.price) * item.quantity : 0), 0).toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="border-t border-gray-100 pt-4 mb-6">
+                        <div className="flex justify-between">
+                          <span className="text-base font-bold text-gray-800">Total</span>
+                          <span className="text-xl font-bold text-[#E55B5B]">₹ {totalPrice.toFixed(2)}</span>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={placeOrder}
+                        className="w-full bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold py-3.5 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      >
+                        <CreditCard className="w-4 h-4" />
+                        Place Order
+                      </button>
+
+                      <button
+                        onClick={() => navigateTo('home')}
+                        className="w-full mt-3 border border-gray-300 hover:border-[#E55B5B] text-gray-700 hover:text-[#E55B5B] text-sm font-medium py-3 rounded-lg transition-colors"
+                      >
+                        Continue Shopping
+                      </button>
+
+                      {/* Delivery Info */}
+                      <div className="mt-6 pt-4 border-t border-gray-100">
+                        <div className="flex items-start gap-2 mb-3">
+                          <Truck className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <div>
+                            <p className="text-xs font-semibold text-gray-700">Free Home Delivery</p>
+                            <p className="text-[11px] text-gray-400">Estimated 1-2 business days</p>
                           </div>
                         </div>
-                      ))}
+                        <div className="flex items-start gap-2">
+                          <MapPin className="w-4 h-4 text-[#E55B5B] mt-0.5 flex-shrink-0" />
+                          <div>
+                            <p className="text-xs font-semibold text-gray-700">Delivering to</p>
+                            <p className="text-[11px] text-gray-400">42, Marine Drive, Kochi</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                {/* Order Summary Sidebar */}
-                <div className="lg:w-80">
-                  <div className="bg-white rounded-2xl shadow-sm p-6 sticky top-[200px]">
-                    <h2 className="text-lg font-bold text-gray-800 mb-4">Order Summary</h2>
-
-                    <div className="space-y-3 mb-4">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Subtotal ({totalItems} kg)</span>
-                        <span className="text-gray-800 font-medium">₹ {totalPrice.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Delivery</span>
-                        <span className="text-green-600 font-medium">FREE</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Savings</span>
-                        <span className="text-green-600 font-medium">
-                          - ₹ {cart.reduce((sum, item) => sum + (item.originalPrice ? (item.originalPrice - item.price) * item.quantity : 0), 0).toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-gray-100 pt-4 mb-6">
-                      <div className="flex justify-between">
-                        <span className="text-base font-bold text-gray-800">Total</span>
-                        <span className="text-xl font-bold text-[#E55B5B]">₹ {totalPrice.toFixed(2)}</span>
-                      </div>
-                    </div>
-
-                    <button className="w-full bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold py-3.5 rounded-lg transition-colors">
-                      Place Order
-                    </button>
-
-                    <button
-                      onClick={() => navigateTo('home')}
-                      className="w-full mt-3 border border-gray-300 hover:border-[#E55B5B] text-gray-700 hover:text-[#E55B5B] text-sm font-medium py-3 rounded-lg transition-colors"
-                    >
-                      Continue Shopping
-                    </button>
+              )
+            ) : (
+              /* ===== ORDERS / PURCHASED FISH TAB ===== */
+              purchasedOrders.length === 0 ? (
+                <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
+                  <div className="w-24 h-24 mx-auto bg-[#FDE8E8] rounded-full flex items-center justify-center mb-6">
+                    <Package className="w-12 h-12 text-[#E55B5B] opacity-50" />
                   </div>
+                  <h2 className="text-xl font-bold text-gray-800 mb-2">No orders yet</h2>
+                  <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">
+                    You haven&apos;t placed any orders yet. Add some fresh fish to your cart and place your first order!
+                  </p>
+                  <button
+                    onClick={() => navigateTo('home')}
+                    className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold px-8 py-3 rounded-lg transition-colors"
+                  >
+                    Start Shopping
+                  </button>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-6">
+                  {purchasedOrders.map((order) => {
+                    const isExpanded = expandedOrder === order.id
+                    const statusInfo = statusConfig[order.status]
+                    const StatusIcon = statusInfo.icon
+
+                    return (
+                      <div
+                        key={order.id}
+                        className="bg-white rounded-2xl shadow-sm overflow-hidden"
+                      >
+                        {/* Order Header */}
+                        <div
+                          className="px-6 py-4 cursor-pointer hover:bg-gray-50/50 transition-colors"
+                          onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
+                        >
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div className="flex items-center gap-4">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${statusInfo.bg} border`}>
+                                <StatusIcon className={`w-5 h-5 ${statusInfo.color}`} />
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <h3 className="text-sm font-bold text-gray-900">Order {order.id}</h3>
+                                  <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${statusInfo.bg} ${statusInfo.color}`}>
+                                    {order.status}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-gray-400 mt-0.5">
+                                  Placed on {new Date(order.orderDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-6">
+                              <div className="text-right">
+                                <p className="text-sm font-bold text-[#E55B5B]">₹ {order.totalPrice.toFixed(2)}</p>
+                                <p className="text-xs text-gray-400">{order.items.length} type{order.items.length !== 1 ? 's' : ''} · {order.totalItems} kg</p>
+                              </div>
+                              <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                            </div>
+                          </div>
+
+                          {/* Order Progress Bar */}
+                          <div className="mt-4 flex items-center gap-1">
+                            {['Confirmed', 'Processing', 'Shipped', 'Delivered'].map((step, i) => {
+                              const isCompleted = ['Confirmed', 'Processing', 'Shipped', 'Delivered'].indexOf(order.status) >= i
+                              const isCurrent = order.status === step
+                              return (
+                                <div key={step} className="flex-1 flex items-center gap-1">
+                                  <div className={`h-1.5 flex-1 rounded-full transition-all ${
+                                    isCompleted ? 'bg-[#E55B5B]' : 'bg-gray-200'
+                                  } ${isCurrent ? 'animate-pulse' : ''}`} />
+                                  {i < 3 && (
+                                    <div className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${
+                                      isCompleted ? 'bg-[#E55B5B]' : 'bg-gray-200'
+                                    }`} />
+                                  )}
+                                </div>
+                              )
+                            })}
+                          </div>
+                          <div className="mt-1 flex justify-between">
+                            <span className="text-[9px] text-gray-400">Confirmed</span>
+                            <span className="text-[9px] text-gray-400">Processing</span>
+                            <span className="text-[9px] text-gray-400">Shipped</span>
+                            <span className="text-[9px] text-gray-400">Delivered</span>
+                          </div>
+                        </div>
+
+                        {/* Expanded Order Details */}
+                        {isExpanded && (
+                          <div className="border-t border-gray-100">
+                            {/* Order Items */}
+                            <div className="divide-y divide-gray-50">
+                              {order.items.map((item) => (
+                                <div key={item.id} className="px-6 py-4 flex items-center gap-4">
+                                  <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-50">
+                                    <Image
+                                      src={item.image}
+                                      alt={item.title}
+                                      fill
+                                      className="object-cover"
+                                      sizes="64px"
+                                    />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <h4 className="text-sm font-semibold text-gray-900 tracking-wide">{item.title}</h4>
+                                    <p className="text-xs text-gray-400">{item.category} · {item.quantity} kg</p>
+                                  </div>
+                                  <p className="text-sm font-bold text-gray-800 flex-shrink-0">
+                                    ₹ {(item.price * item.quantity).toFixed(2)}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Order Footer */}
+                            <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100">
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div className="flex items-start gap-4">
+                                  <div className="flex items-start gap-1.5">
+                                    <MapPin className="w-3.5 h-3.5 text-gray-400 mt-0.5" />
+                                    <p className="text-xs text-gray-500 max-w-xs">{order.address}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  {order.status !== 'Delivered' && (
+                                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                                      <Truck className="w-3.5 h-3.5" />
+                                      <span>ETA: {new Date(order.deliveryDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                                    </div>
+                                  )}
+                                  <button className="text-xs font-semibold text-[#E55B5B] hover:text-[#D04A4A] transition-colors flex items-center gap-1">
+                                    <Star className="w-3 h-3" />
+                                    Rate Order
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              )
             )}
           </div>
         )}
