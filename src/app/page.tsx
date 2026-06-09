@@ -156,34 +156,35 @@ export default function Home() {
         {/* Category Menu Row */}
         <div className="border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Navigation Links Row */}
-            <div className="flex items-center py-2.5 gap-6">
-              <button className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors">
-                Buy Fish
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              <nav className="flex items-center gap-6">
-                <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors">
-                  Buy Now
+            <div className="flex items-center justify-between py-2.5">
+              <div className="flex items-center gap-6">
+                <button className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors">
+                  Buy Fish
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                <nav className="flex items-center gap-6">
+                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors">
+                    Buy Now
+                  </a>
+                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors flex items-center gap-1">
+                    Salmon&apos;s Story
+                    <ChevronDown className="w-3 h-3" />
+                  </a>
+                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors">
+                    Reach Us
+                  </a>
+                </nav>
+              </div>
+              <div className="hidden sm:flex items-center gap-4">
+                <a href="#" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                  <Phone className="w-3 h-3" />
+                  <span>+91 9539008444</span>
                 </a>
-                <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors">
-                  Salmon&apos;s Story
+                <a href="#" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                  <Mail className="w-3 h-3" />
+                  <span>customercare@salmons.in</span>
                 </a>
-                <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors">
-                  Reach Us
-                </a>
-              </nav>
-            </div>
-            {/* Contact Info Row */}
-            <div className="flex justify-end items-center pb-2.5 gap-4">
-              <a href="#" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
-                <Phone className="w-3 h-3" />
-                <span>+91 9539008444</span>
-              </a>
-              <a href="#" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
-                <Mail className="w-3 h-3" />
-                <span>customercare@salmons.in</span>
-              </a>
+              </div>
             </div>
           </div>
         </div>
