@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useRef, useEffect } from 'react'
 import { Search, ShoppingCart, ChevronDown, Phone, Mail, Facebook, Instagram } from 'lucide-react'
 import Image from 'next/image'
 
@@ -102,7 +103,30 @@ const products = [
   },
 ]
 
+const fishCategories = [
+  'Seawater Fish',
+  'Backwater Fish',
+  'Freshwater Fish',
+  'Shelled Fish',
+  'Imported Fish',
+  'Exotic Indian',
+  'Ready To Cook',
+  'Live Fish',
+]
+
 export default function Home() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F7F7]">
       {/* ===== HEADER ===== */}
@@ -158,10 +182,28 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between py-2.5">
               <div className="flex items-center gap-6">
-                <button className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors">
-                  Buy Fish
-                  <ChevronDown className="w-4 h-4" />
-                </button>
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors"
+                  >
+                    Buy Fish
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {isDropdownOpen && (
+                    <div className="absolute top-full left-0 mt-0 w-52 bg-white rounded-b-md shadow-lg border-t-2 border-[#E55B5B] z-50 py-1">
+                      {fishCategories.map((category) => (
+                        <a
+                          key={category}
+                          href="#"
+                          className="block px-5 py-2.5 text-sm text-gray-700 hover:bg-[#FDE8E8] hover:text-[#E55B5B] transition-colors"
+                        >
+                          {category}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <nav className="flex items-center gap-6">
                   <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors">
                     Buy Now
