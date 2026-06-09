@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Search, ChevronDown, Phone, Mail, Facebook, Instagram, ArrowLeft, Package, CheckCircle, Clock, MapPin, Fish, Truck, Star, X, PhoneCall, MessageCircle } from 'lucide-react'
+import { Search, ChevronDown, Phone, Mail, Facebook, Instagram, ArrowLeft, Package, CheckCircle, Clock, MapPin, Fish, Truck, Star, X, PhoneCall, MessageCircle, Info, Scale, Droplets, ShieldCheck } from 'lucide-react'
 import Image from 'next/image'
 
 type Page = 'home' | 'buyfish'
@@ -125,7 +125,9 @@ export default function Home() {
   const [callToast, setCallToast] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState('All Fish')
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null)
+  const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
 
   const filteredProducts = selectedCategory === 'All Fish'
     ? products
@@ -147,6 +149,27 @@ export default function Home() {
       return () => clearTimeout(timer)
     }
   }, [callToast])
+
+  useEffect(() => {
+    function handleEsc(e: KeyboardEvent) {
+      if (e.key === 'Escape') setSelectedProduct(null)
+    }
+    function handleOverlayClick(e: MouseEvent) {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setSelectedProduct(null)
+      }
+    }
+    if (selectedProduct) {
+      document.addEventListener('keydown', handleEsc)
+      document.addEventListener('mousedown', handleOverlayClick)
+      document.body.style.overflow = 'hidden'
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEsc)
+      document.removeEventListener('mousedown', handleOverlayClick)
+      document.body.style.overflow = ''
+    }
+  }, [selectedProduct])
 
   function handleCall(productTitle: string) {
     setCallToast(productTitle)
@@ -296,6 +319,122 @@ export default function Home() {
         </div>
       )}
 
+      {/* ===== PRODUCT DETAIL MODAL ===== */}
+      {selectedProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in duration-200">
+          <div
+            ref={modalRef}
+            className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"
+          >
+            {/* Modal Header with close */}
+            <div className="relative">
+              <button
+                onClick={() => setSelectedProduct(null)}
+                className="absolute top-4 right-4 z-10 w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-colors"
+              >
+                <X className="w-4 h-4 text-gray-600" />
+              </button>
+
+              <div className="flex flex-col md:flex-row">
+                {/* Product Image */}
+                <div className="relative w-full md:w-1/2 aspect-square bg-gray-50">
+                  <Image
+                    src={selectedProduct.image}
+                    alt={selectedProduct.title}
+                    fill
+                    className="object-cover md:rounded-l-2xl"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    priority
+                  />
+                </div>
+
+                {/* Product Details */}
+                <div className="flex-1 p-6 md:p-8 flex flex-col">
+                  {/* Category Badge */}
+                  <span className="inline-flex items-center gap-1.5 self-start text-xs font-semibold px-3 py-1 rounded-full bg-[#CFFAFE] text-[#0891B2] mb-3">
+                    <Fish className="w-3 h-3" />
+                    {selectedProduct.category}
+                  </span>
+
+                  {/* Title */}
+                  <h2 className="text-xl font-bold text-gray-900 tracking-wide mb-2">
+                    {selectedProduct.title}
+                  </h2>
+
+                  {/* Price */}
+                  <div className="mb-4">
+                    <p className="text-2xl font-bold text-[#0891B2]">
+                      ₹ {selectedProduct.price.toFixed(2)}
+                      <span className="text-sm font-normal text-gray-500">/kg</span>
+                    </p>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-sm text-gray-600 leading-relaxed mb-6">
+                    Fresh {selectedProduct.title.toLowerCase()} sourced directly from the coast. 
+                    Hand-picked and quality-checked to ensure you get the freshest catch delivered to your doorstep. 
+                    Perfect for grilling, frying, or currying.
+                  </p>
+
+                  {/* Quick Info */}
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                      <Scale className="w-4 h-4 text-[#0891B2]" />
+                      <div>
+                        <p className="text-xs font-semibold text-gray-700">Min. Order</p>
+                        <p className="text-[11px] text-gray-500">1 kg</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                      <Droplets className="w-4 h-4 text-[#0891B2]" />
+                      <div>
+                        <p className="text-xs font-semibold text-gray-700">Freshness</p>
+                        <p className="text-[11px] text-gray-500">100% Fresh</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                      <ShieldCheck className="w-4 h-4 text-[#0891B2]" />
+                      <div>
+                        <p className="text-xs font-semibold text-gray-700">Quality</p>
+                        <p className="text-[11px] text-gray-500">Premium Grade</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                      <Truck className="w-4 h-4 text-[#0891B2]" />
+                      <div>
+                        <p className="text-xs font-semibold text-gray-700">Delivery</p>
+                        <p className="text-[11px] text-gray-500">Same Day</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="mt-auto space-y-3">
+                    <button
+                      onClick={() => handleCall(selectedProduct.title)}
+                      className="w-full bg-[#0891B2] hover:bg-[#0E7490] text-white text-sm font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+                    >
+                      <PhoneCall className="w-5 h-5" />
+                      Call to Order
+                    </button>
+                    <button
+                      onClick={handleWhatsApp}
+                      className="w-full bg-[#25D366] hover:bg-[#1DA851] text-white text-sm font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      Order via WhatsApp
+                    </button>
+                    <p className="text-center text-xs text-gray-400 mt-2">
+                      Call or WhatsApp us at <span className="font-semibold text-gray-600">{COMPANY_PHONE}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ===== MAIN CONTENT ===== */}
       <main className="flex-1">
         {currentPage === 'home' ? (
@@ -342,7 +481,8 @@ export default function Home() {
               {filteredProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200 flex flex-col"
+                  onClick={() => setSelectedProduct(product)}
+                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200 flex flex-col cursor-pointer group"
                 >
                   {/* Product Image */}
                   <div className="relative aspect-square bg-gray-50 overflow-hidden">
@@ -350,7 +490,7 @@ export default function Home() {
                       src={product.image}
                       alt={product.title}
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                       sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     />
                   </div>
@@ -367,25 +507,23 @@ export default function Home() {
                       ₹ {product.price.toFixed(2)}/kg
                     </p>
                     <div className="mt-auto pt-3">
+                      {/* Call to Order Button */}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleCall(product.title) }}
+                        className="mt-3 w-full bg-[#0891B2] hover:bg-[#0E7490] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      >
+                        <PhoneCall className="w-4 h-4" />
+                        Call to Order
+                      </button>
 
-
-                    {/* Call to Order Button */}
-                    <button
-                      onClick={() => handleCall(product.title)}
-                      className="mt-3 w-full bg-[#0891B2] hover:bg-[#0E7490] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
-                    >
-                      <PhoneCall className="w-4 h-4" />
-                      Call to Order
-                    </button>
-
-                    {/* WhatsApp Button */}
-                    <button
-                      onClick={handleWhatsApp}
-                      className="mt-2 w-full bg-[#25D366] hover:bg-[#1DA851] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
-                    >
-                      <MessageCircle className="w-4 h-4" />
-                      WhatsApp
-                    </button>
+                      {/* WhatsApp Button */}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleWhatsApp() }}
+                        className="mt-2 w-full bg-[#25D366] hover:bg-[#1DA851] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        WhatsApp
+                      </button>
                     </div>
                   </div>
                 </div>
