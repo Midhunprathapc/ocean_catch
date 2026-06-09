@@ -1,106 +1,34 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Search, ShoppingCart, ChevronDown, Phone, Mail, Facebook, Instagram } from 'lucide-react'
+import { Search, ShoppingCart, ChevronDown, Phone, Mail, Facebook, Instagram, Plus, Minus, Trash2, ArrowLeft, Package, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
 
+type Page = 'home' | 'buyfish'
+
+interface CartItem {
+  id: number
+  title: string
+  category: string
+  price: number
+  originalPrice: number | null
+  image: string
+  quantity: number
+}
+
 const products = [
-  {
-    id: 1,
-    title: 'OCTOPUS SMALL',
-    category: 'SHELLED FISH',
-    price: 420,
-    originalPrice: 520,
-    image: '/products/octopus.png',
-  },
-  {
-    id: 2,
-    title: 'SEA CRAB / KADAL NJAND - MEDIUM',
-    category: 'SHELLED FISH',
-    price: 380,
-    originalPrice: null,
-    image: '/products/crab.png',
-  },
-  {
-    id: 3,
-    title: 'SALMON FILLET',
-    category: 'SEA WATER FISH',
-    price: 890,
-    originalPrice: 1050,
-    image: '/products/salmon.png',
-  },
-  {
-    id: 4,
-    title: 'PRAWNS / CHEMMEEN - LARGE',
-    category: 'SHELLED FISH',
-    price: 550,
-    originalPrice: null,
-    image: '/products/prawns.png',
-  },
-  {
-    id: 5,
-    title: 'KING FISH / NEIMEEN',
-    category: 'SEA WATER FISH',
-    price: 720,
-    originalPrice: 850,
-    image: '/products/kingfish.png',
-  },
-  {
-    id: 6,
-    title: 'MUSSELS / KALLUMMAKAYA',
-    category: 'SHELLED FISH',
-    price: 280,
-    originalPrice: null,
-    image: '/products/mussels.png',
-  },
-  {
-    id: 7,
-    title: 'SARDINES / MATHI',
-    category: 'SEA WATER FISH',
-    price: 180,
-    originalPrice: null,
-    image: '/products/sardines.png',
-  },
-  {
-    id: 8,
-    title: 'SQUID / KOONTHAL',
-    category: 'SHELLED FISH',
-    price: 460,
-    originalPrice: 550,
-    image: '/products/squid.png',
-  },
-  {
-    id: 9,
-    title: 'TUNA / CHOORA',
-    category: 'SEA WATER FISH',
-    price: 590,
-    originalPrice: null,
-    image: '/products/tuna.png',
-  },
-  {
-    id: 10,
-    title: 'PEARL SPOT / KARIMEEN',
-    category: 'BACKWATER FISH',
-    price: 650,
-    originalPrice: 780,
-    image: '/products/pearlspot.png',
-  },
-  {
-    id: 11,
-    title: 'POMFRET / AVOLI',
-    category: 'SEA WATER FISH',
-    price: 780,
-    originalPrice: null,
-    image: '/products/pomfret.png',
-  },
-  {
-    id: 12,
-    title: 'ROHU / ROHU',
-    category: 'BACKWATER FISH',
-    price: 320,
-    originalPrice: null,
-    image: '/products/rohu.png',
-  },
+  { id: 1, title: 'OCTOPUS SMALL', category: 'SHELLED FISH', price: 420, originalPrice: 520, image: '/products/octopus.png' },
+  { id: 2, title: 'SEA CRAB / KADAL NJAND - MEDIUM', category: 'SHELLED FISH', price: 380, originalPrice: null, image: '/products/crab.png' },
+  { id: 3, title: 'SALMON FILLET', category: 'SEA WATER FISH', price: 890, originalPrice: 1050, image: '/products/salmon.png' },
+  { id: 4, title: 'PRAWNS / CHEMMEEN - LARGE', category: 'SHELLED FISH', price: 550, originalPrice: null, image: '/products/prawns.png' },
+  { id: 5, title: 'KING FISH / NEIMEEN', category: 'SEA WATER FISH', price: 720, originalPrice: 850, image: '/products/kingfish.png' },
+  { id: 6, title: 'MUSSELS / KALLUMMAKAYA', category: 'SHELLED FISH', price: 280, originalPrice: null, image: '/products/mussels.png' },
+  { id: 7, title: 'SARDINES / MATHI', category: 'SEA WATER FISH', price: 180, originalPrice: null, image: '/products/sardines.png' },
+  { id: 8, title: 'SQUID / KOONTHAL', category: 'SHELLED FISH', price: 460, originalPrice: 550, image: '/products/squid.png' },
+  { id: 9, title: 'TUNA / CHOORA', category: 'SEA WATER FISH', price: 590, originalPrice: null, image: '/products/tuna.png' },
+  { id: 10, title: 'PEARL SPOT / KARIMEEN', category: 'BACKWATER FISH', price: 650, originalPrice: 780, image: '/products/pearlspot.png' },
+  { id: 11, title: 'POMFRET / AVOLI', category: 'SEA WATER FISH', price: 780, originalPrice: null, image: '/products/pomfret.png' },
+  { id: 12, title: 'ROHU / ROHU', category: 'BACKWATER FISH', price: 320, originalPrice: null, image: '/products/rohu.png' },
 ]
 
 const fishCategories = [
@@ -115,8 +43,14 @@ const fishCategories = [
 ]
 
 export default function Home() {
+  const [currentPage, setCurrentPage] = useState<Page>('home')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [cart, setCart] = useState<CartItem[]>([])
+  const [addedToast, setAddedToast] = useState<string | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -127,24 +61,71 @@ export default function Home() {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  useEffect(() => {
+    if (addedToast) {
+      const timer = setTimeout(() => setAddedToast(null), 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [addedToast])
+
+  function addToCart(productId: number) {
+    const product = products.find((p) => p.id === productId)
+    if (!product) return
+
+    setCart((prev) => {
+      const existing = prev.find((item) => item.id === productId)
+      if (existing) {
+        return prev.map((item) =>
+          item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      }
+      return [...prev, { ...product, quantity: 1 }]
+    })
+    setAddedToast(product.title)
+  }
+
+  function updateQuantity(productId: number, delta: number) {
+    setCart((prev) =>
+      prev
+        .map((item) =>
+          item.id === productId ? { ...item, quantity: item.quantity + delta } : item
+        )
+        .filter((item) => item.quantity > 0)
+    )
+  }
+
+  function removeFromCart(productId: number) {
+    setCart((prev) => prev.filter((item) => item.id !== productId))
+  }
+
+  function navigateTo(page: Page) {
+    setCurrentPage(page)
+    setIsDropdownOpen(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const breadcrumbTitle = currentPage === 'home' ? 'Buy Fish' : 'My Fishes'
+  const breadcrumbPath = currentPage === 'home' ? 'Buy Fish' : 'My Fishes'
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F7F7]">
       {/* ===== HEADER ===== */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-white shadow-sm sticky top-0 z-40">
         {/* Main Navigation Row */}
         <div className="border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between py-4 gap-4">
               {/* Logo */}
-              <div className="flex-shrink-0">
-                <a href="#" className="flex flex-col items-start">
+              <div className="flex-shrink-0 cursor-pointer" onClick={() => navigateTo('home')}>
+                <div className="flex flex-col items-start">
                   <span className="text-2xl font-bold text-[#E55B5B] tracking-wide" style={{ fontFamily: 'var(--font-inter)' }}>
                     salmons
                   </span>
                   <span className="text-[10px] font-medium text-gray-500 tracking-[0.2em] -mt-1">
                     DEFINITELY FRESH
                   </span>
-                </a>
+                </div>
               </div>
 
               {/* Search Bar */}
@@ -166,12 +147,17 @@ export default function Home() {
                 <a href="#" className="text-xs font-semibold text-gray-600 hover:text-[#E55B5B] transition-colors tracking-wide">
                   SIGNUP / LOGIN
                 </a>
-                <a href="#" className="relative text-gray-600 hover:text-[#E55B5B] transition-colors">
+                <button
+                  onClick={() => navigateTo('buyfish')}
+                  className="relative text-gray-600 hover:text-[#E55B5B] transition-colors"
+                >
                   <ShoppingCart className="w-6 h-6" />
-                  <span className="absolute -top-2 -right-2 bg-[#E55B5B] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-                    0
-                  </span>
-                </a>
+                  {totalItems > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-[#E55B5B] text-white text-[10px] font-bold min-w-4 h-4 flex items-center justify-center rounded-full px-0.5">
+                      {totalItems}
+                    </span>
+                  )}
+                </button>
               </div>
             </div>
           </div>
@@ -196,6 +182,7 @@ export default function Home() {
                         <a
                           key={category}
                           href="#"
+                          onClick={(e) => { e.preventDefault(); setIsDropdownOpen(false) }}
                           className="block px-5 py-2.5 text-sm text-gray-700 hover:bg-[#FDE8E8] hover:text-[#E55B5B] transition-colors"
                         >
                           {category}
@@ -205,9 +192,12 @@ export default function Home() {
                   )}
                 </div>
                 <nav className="flex items-center gap-6">
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors">
+                  <button
+                    onClick={() => navigateTo('home')}
+                    className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors"
+                  >
                     Buy Now
-                  </a>
+                  </button>
                   <a href="#" className="text-sm font-medium text-gray-700 hover:text-[#E55B5B] transition-colors flex items-center gap-1">
                     Salmon&apos;s Story
                     <ChevronDown className="w-3 h-3" />
@@ -234,58 +224,256 @@ export default function Home() {
         {/* Breadcrumb Banner */}
         <div className="bg-gray-50 border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
-            <h1 className="text-lg font-bold text-gray-800 mb-1">Buy Fish</h1>
+            <h1 className="text-lg font-bold text-gray-800 mb-1">{breadcrumbTitle}</h1>
             <p className="text-sm text-gray-500">
-              <a href="#" className="hover:text-[#E55B5B] transition-colors">Home</a>
+              <button onClick={() => navigateTo('home')} className="hover:text-[#E55B5B] transition-colors">
+                Home
+              </button>
               <span className="mx-2">/</span>
-              <span className="text-gray-700">Buy Fish</span>
+              <span className="text-gray-700">{breadcrumbPath}</span>
             </p>
           </div>
         </div>
       </header>
 
+      {/* ===== TOAST NOTIFICATION ===== */}
+      {addedToast && (
+        <div className="fixed top-4 right-4 z-50 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-right duration-300">
+          <CheckCircle className="w-5 h-5" />
+          <span className="text-sm font-medium">{addedToast} added to cart!</span>
+        </div>
+      )}
+
       {/* ===== MAIN CONTENT ===== */}
       <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Product Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
-              >
-                {/* Product Image */}
-                <div className="relative aspect-square bg-gray-50 overflow-hidden">
-                  <Image
-                    src={product.image}
-                    alt={product.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  />
+        {currentPage === 'home' ? (
+          /* ===== HOME PAGE - PRODUCT GRID ===== */
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {products.map((product) => {
+                const inCart = cart.find((item) => item.id === product.id)
+                return (
+                  <div
+                    key={product.id}
+                    className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+                  >
+                    {/* Product Image */}
+                    <div className="relative aspect-square bg-gray-50 overflow-hidden">
+                      <Image
+                        src={product.image}
+                        alt={product.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      />
+                      {inCart && (
+                        <div className="absolute top-2 right-2 bg-[#E55B5B] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                          {inCart.quantity} in cart
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Product Info */}
+                    <div className="p-4 text-center">
+                      <h3 className="text-sm font-bold text-gray-900 tracking-wide mb-1">
+                        {product.title}
+                      </h3>
+                      <p className="text-xs text-gray-400 font-medium tracking-wider mb-2">
+                        {product.category}
+                      </p>
+                      <p className="text-base font-bold text-[#E55B5B]">
+                        ₹ {product.price.toFixed(2)}/kg
+                      </p>
+                      {product.originalPrice && (
+                        <p className="text-xs text-gray-400 line-through mt-0.5">
+                          ₹ {product.originalPrice.toFixed(2)}/kg
+                        </p>
+                      )}
+
+                      {/* Add to Cart Button */}
+                      {inCart ? (
+                        <div className="mt-3 flex items-center justify-center gap-3">
+                          <button
+                            onClick={() => updateQuantity(product.id, -1)}
+                            className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:border-[#E55B5B] hover:text-[#E55B5B] transition-colors"
+                          >
+                            <Minus className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="text-sm font-bold text-gray-800 w-6 text-center">{inCart.quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(product.id, 1)}
+                            className="w-8 h-8 flex items-center justify-center rounded-full bg-[#E55B5B] text-white hover:bg-[#D04A4A] transition-colors"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => addToCart(product.id)}
+                          className="mt-3 w-full bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors"
+                        >
+                          Add to Cart
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        ) : (
+          /* ===== MY FISHES PAGE - CART / PURCHASED ITEMS ===== */
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Back Button */}
+            <button
+              onClick={() => navigateTo('home')}
+              className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#E55B5B] transition-colors mb-6"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Continue Shopping
+            </button>
+
+            {cart.length === 0 ? (
+              /* Empty Cart State */
+              <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
+                <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                  <Package className="w-12 h-12 text-gray-300" />
+                </div>
+                <h2 className="text-xl font-bold text-gray-800 mb-2">Your cart is empty</h2>
+                <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">
+                  Looks like you haven&apos;t added any fish to your cart yet. Browse our fresh selection and add your favorites!
+                </p>
+                <button
+                  onClick={() => navigateTo('home')}
+                  className="bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold px-8 py-3 rounded-lg transition-colors"
+                >
+                  Browse Fish
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col lg:flex-row gap-8">
+                {/* Cart Items */}
+                <div className="flex-1">
+                  <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-100">
+                      <h2 className="text-lg font-bold text-gray-800">
+                        My Fishes
+                        <span className="ml-2 text-sm font-normal text-gray-500">({totalItems} item{totalItems !== 1 ? 's' : ''})</span>
+                      </h2>
+                    </div>
+
+                    <div className="divide-y divide-gray-100">
+                      {cart.map((item) => (
+                        <div key={item.id} className="p-4 sm:p-6 flex gap-4">
+                          {/* Item Image */}
+                          <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gray-50">
+                            <Image
+                              src={item.image}
+                              alt={item.title}
+                              fill
+                              className="object-cover"
+                              sizes="96px"
+                            />
+                          </div>
+
+                          {/* Item Details */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex justify-between items-start gap-2">
+                              <div>
+                                <h3 className="text-sm font-bold text-gray-900 tracking-wide">{item.title}</h3>
+                                <p className="text-xs text-gray-400 font-medium tracking-wider mt-0.5">{item.category}</p>
+                              </div>
+                              <button
+                                onClick={() => removeFromCart(item.id)}
+                                className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+
+                            <div className="flex items-end justify-between mt-3">
+                              {/* Quantity Controls */}
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => updateQuantity(item.id, -1)}
+                                  className="w-7 h-7 flex items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:border-[#E55B5B] hover:text-[#E55B5B] transition-colors"
+                                >
+                                  <Minus className="w-3 h-3" />
+                                </button>
+                                <span className="text-sm font-bold text-gray-800 w-6 text-center">{item.quantity}</span>
+                                <button
+                                  onClick={() => updateQuantity(item.id, 1)}
+                                  className="w-7 h-7 flex items-center justify-center rounded-md bg-[#E55B5B] text-white hover:bg-[#D04A4A] transition-colors"
+                                >
+                                  <Plus className="w-3 h-3" />
+                                </button>
+                                <span className="text-xs text-gray-400 ml-1">kg</span>
+                              </div>
+
+                              {/* Price */}
+                              <div className="text-right">
+                                <p className="text-base font-bold text-[#E55B5B]">
+                                  ₹ {(item.price * item.quantity).toFixed(2)}
+                                </p>
+                                {item.quantity > 1 && (
+                                  <p className="text-xs text-gray-400">
+                                    ₹ {item.price.toFixed(2)}/kg
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Product Info */}
-                <div className="p-4 text-center">
-                  <h3 className="text-sm font-bold text-gray-900 tracking-wide mb-1">
-                    {product.title}
-                  </h3>
-                  <p className="text-xs text-gray-400 font-medium tracking-wider mb-2">
-                    {product.category}
-                  </p>
-                  <p className="text-base font-bold text-[#E55B5B]">
-                    ₹ {product.price.toFixed(2)}/kg
-                  </p>
-                  {product.originalPrice && (
-                    <p className="text-xs text-gray-400 line-through mt-0.5">
-                      ₹ {product.originalPrice.toFixed(2)}/kg
-                    </p>
-                  )}
+                {/* Order Summary Sidebar */}
+                <div className="lg:w-80">
+                  <div className="bg-white rounded-2xl shadow-sm p-6 sticky top-[200px]">
+                    <h2 className="text-lg font-bold text-gray-800 mb-4">Order Summary</h2>
+
+                    <div className="space-y-3 mb-4">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Subtotal ({totalItems} kg)</span>
+                        <span className="text-gray-800 font-medium">₹ {totalPrice.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Delivery</span>
+                        <span className="text-green-600 font-medium">FREE</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Savings</span>
+                        <span className="text-green-600 font-medium">
+                          - ₹ {cart.reduce((sum, item) => sum + (item.originalPrice ? (item.originalPrice - item.price) * item.quantity : 0), 0).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-gray-100 pt-4 mb-6">
+                      <div className="flex justify-between">
+                        <span className="text-base font-bold text-gray-800">Total</span>
+                        <span className="text-xl font-bold text-[#E55B5B]">₹ {totalPrice.toFixed(2)}</span>
+                      </div>
+                    </div>
+
+                    <button className="w-full bg-[#E55B5B] hover:bg-[#D04A4A] text-white text-sm font-semibold py-3.5 rounded-lg transition-colors">
+                      Place Order
+                    </button>
+
+                    <button
+                      onClick={() => navigateTo('home')}
+                      className="w-full mt-3 border border-gray-300 hover:border-[#E55B5B] text-gray-700 hover:text-[#E55B5B] text-sm font-medium py-3 rounded-lg transition-colors"
+                    >
+                      Continue Shopping
+                    </button>
+                  </div>
                 </div>
               </div>
-            ))}
+            )}
           </div>
-        </div>
+        )}
       </main>
 
       {/* ===== FOOTER ===== */}
@@ -296,14 +484,14 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
               {/* Column 1: Logo */}
               <div className="sm:col-span-2 lg:col-span-1">
-                <a href="#" className="flex flex-col items-start">
+                <div className="flex flex-col items-start cursor-pointer" onClick={() => navigateTo('home')}>
                   <span className="text-2xl font-bold text-[#E55B5B] tracking-wide">
                     salmons
                   </span>
                   <span className="text-[10px] font-medium text-gray-500 tracking-[0.2em] -mt-1">
                     DEFINITELY FRESH
                   </span>
-                </a>
+                </div>
                 <p className="mt-4 text-xs text-gray-500 leading-relaxed">
                   Premium quality seafood delivered fresh to your doorstep. Experience the taste of the ocean.
                 </p>
@@ -313,21 +501,9 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-bold text-gray-900 mb-4">Quick Links</h4>
                 <ul className="space-y-2.5">
-                  <li>
-                    <a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">
-                      Why Salmons?
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">
-                      How Salmons?
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">
-                      Reach Us
-                    </a>
-                  </li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Why Salmons?</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">How Salmons?</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Reach Us</a></li>
                 </ul>
               </div>
 
@@ -335,21 +511,9 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-bold text-gray-900 mb-4">Policies</h4>
                 <ul className="space-y-2.5">
-                  <li>
-                    <a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">
-                      Terms &amp; Conditions
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">
-                      Privacy Policy
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">
-                      Refund Policy
-                    </a>
-                  </li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Terms &amp; Conditions</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Privacy Policy</a></li>
+                  <li><a href="#" className="text-sm text-gray-500 hover:text-[#E55B5B] transition-colors">Refund Policy</a></li>
                 </ul>
               </div>
 
@@ -370,7 +534,6 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-bold text-gray-900 mb-4">Get The Mobile App</h4>
                 <div className="space-y-2.5">
-                  {/* App Store Badge */}
                   <a href="#" className="inline-block">
                     <div className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors">
                       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -382,7 +545,6 @@ export default function Home() {
                       </div>
                     </div>
                   </a>
-                  {/* Google Play Badge */}
                   <a href="#" className="inline-block">
                     <div className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors">
                       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -408,7 +570,6 @@ export default function Home() {
                 © Salmons, a unit of Hallmark Food Products LLP. Powered by Skywall
               </p>
               <div className="flex items-center gap-3">
-                {/* Positive SSL */}
                 <div className="flex items-center gap-1 px-2 py-1 rounded bg-white/15">
                   <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 text-white">
                     <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" stroke="currentColor" strokeWidth="2" fill="none"/>
@@ -416,11 +577,9 @@ export default function Home() {
                   </svg>
                   <span className="text-[9px] font-semibold text-white">Positive SSL</span>
                 </div>
-                {/* Visa */}
                 <div className="flex items-center gap-1 px-2 py-1 rounded bg-white/15">
                   <span className="text-xs font-bold italic text-white tracking-tighter">VISA</span>
                 </div>
-                {/* Mastercard */}
                 <div className="flex items-center gap-1 px-2 py-1 rounded bg-white/15">
                   <div className="flex -space-x-1.5">
                     <div className="w-3 h-3 rounded-full bg-[#EB001B] opacity-80" />
