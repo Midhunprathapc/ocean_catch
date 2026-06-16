@@ -31,9 +31,10 @@ export default async function HomePage({
   const products = await db.product.findMany({
     where: {
       inStock: true,
+      deletedAt: null,
       ...(activeCategory !== 'All' ? { category: activeCategory } : {}),
     },
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
   })
 
   return (

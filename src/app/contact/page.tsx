@@ -3,6 +3,7 @@ import {
   Fish, Phone, Mail, PhoneCall, MessageCircle,
   MapPin, Clock, Facebook, Instagram, ArrowLeft
 } from 'lucide-react'
+import { ContactForm } from '@/components/contact-form'
 
 const COMPANY_PHONE = '+91 9656200209'
 
@@ -133,40 +134,7 @@ export default function ContactPage() {
                   <p className="text-sm text-gray-500">We&apos;ll get back to you shortly</p>
                 </div>
               </div>
-              <form className="space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">Full Name</label>
-                    <input type="text" placeholder="Your name" className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">Phone Number</label>
-                    <input type="tel" placeholder="+91 XXXXX XXXXX" className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Email Address</label>
-                  <input type="email" placeholder="you@example.com" className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Subject</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors text-gray-600">
-                    <option>Place an Order</option>
-                    <option>Order Inquiry</option>
-                    <option>Feedback</option>
-                    <option>Complaint</option>
-                    <option>Partnership</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Message</label>
-                  <textarea rows={4} placeholder="Write your message here..." className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#0891B2] transition-colors resize-none" />
-                </div>
-                <button type="submit" className="w-full bg-[#0891B2] hover:bg-[#0E7490] text-white text-sm font-semibold py-3 rounded-lg transition-colors">
-                  Send Message
-                </button>
-              </form>
+              <ContactForm />
             </div>
 
             {/* Right column */}

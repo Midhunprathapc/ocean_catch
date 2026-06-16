@@ -13,7 +13,7 @@ export const revalidate = 60
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const product = await db.product.findUnique({ where: { id } })
+  const product = await db.product.findUnique({ where: { id, deletedAt: null } })
   if (!product) return { title: 'Product Not Found' }
   return {
     title: `${product.title} — OceanCatch`,
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const product = await db.product.findUnique({ where: { id } })
+  const product = await db.product.findUnique({ where: { id, deletedAt: null } })
   if (!product) notFound()
 
   return (

@@ -8,16 +8,161 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Category {
+  SEA_WATER_FISH  @map("Sea Water Fish")
+  BACKWATER_FISH  @map("Backwater Fish")
+  FRESHWATER_FISH @map("Freshwater Fish")
+  SHELLED_FISH    @map("Shelled Fish")
+  IMPORTED_FISH   @map("Imported Fish")
+  EXOTIC_INDIAN   @map("Exotic Indian")
+  READY_TO_COOK   @map("Ready To Cook")
+  LIVE_FISH       @map("Live Fish")
+}
+
+enum Unit {
+  kg
+  piece
+  dozen
+  g
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  DELIVERED
+  CANCELLED
+}
+
+enum ContactMethod {
+  PHONE
+  WHATSAPP
+  EMAIL
+}
+
+// ─── Product ──────────────────────────────────────────────────────────────────
+
 model Product {
-  id          String   @id
+  id          String   @id @default(cuid())
   title       String
   description String?
-  category    String
+  category    String   // kept as String for UI flexibility; validated at API layer
   price       Float
-  imageUrl    String?
-  inStock     Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
-  imageId     String?
   unit        String   @default("kg")
+  imageUrl    String?
+  imageId     String?  // Cloudinary public_id for deletion
+  inStock     Boolean  @default(true)
+  featured    Boolean  @default(false)
+  sortOrder   Int      @default(0)  // for drag-to-reorder
+  deletedAt   DateTime?             // soft delete — null means active
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  auditLogs   AuditLog[]
+
+  // Indexes for common query patterns
+  @@index([inStock])
+  @@index([category])
+  @@index([inStock, category])
+  @@index([createdAt(sort: Desc)])
+  @@index([deletedAt])
+  @@index([featured])
+}
+
+// ─── Order ────────────────────────────────────────────────────────────────────
+
+model Order {
+  id            String        @id @default(cuid())
+  customerName  String
+  customerPhone String
+  customerEmail String?
+  message       String?
+  contactMethod ContactMethod @default(WHATSAPP)
+  status        OrderStatus   @default(PENDING)
+  totalAmount   Float?
+  notes         String?       // internal admin notes
+
+  items         OrderItem[]
+  auditLogs     AuditLog[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@index([customerPhone])
+}
+
+// ─── OrderItem ────────────────────────────────────────────────────────────────
+
+model OrderItem {
+  id          String  @id @default(cuid())
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId     String
+  productId   String  // denormalised — product may be deleted later
+  productName String  // snapshot at time of order
+  price       Float   // snapshot at time of order
+  unit        String
+  quantity    Float   @default(1)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+// ─── ContactMessage ───────────────────────────────────────────────────────────
+
+model ContactMessage {
+  id          String   @id @default(cuid())
+  name        String
+  phone       String?
+  email       String?
+  subject     String?
+  message     String
+  isRead      Boolean  @default(false)
+  repliedAt   DateTime?
+
+  createdAt   DateTime @default(now())
+
+  @@index([isRead])
+  @@index([createdAt(sort: Desc)])
+}
+
+// ─── AuditLog ─────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  action     String   // CREATE | UPDATE | DELETE
+  entity     String   // Product | Order | etc.
+  entityId   String
+  changes    Json?    // before/after diff stored as JSON
+  actorIp    String?
+  actorAgent String?
+
+  product    Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId  String?
+
+  order      Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  orderId    String?
+
+  createdAt  DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([createdAt(sort: Desc)])
+}
+
+// ─── SiteSettings ─────────────────────────────────────────────────────────────
+
+model SiteSettings {
+  id           String   @id @default("singleton")  // only one row ever
+  phone        String   @default("+91 9656200209")
+  email        String   @default("midhunprathap.in@gmail.com")
+  address      String?
+  facebookUrl  String?
+  instagramUrl String?
+  whatsappUrl  String?
+  updatedAt    DateTime @updatedAt
 }
