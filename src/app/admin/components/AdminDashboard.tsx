@@ -71,9 +71,14 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   async function fetchProducts() {
     setLoading(true); setError('')
     try {
-      const res = await fetch('/api/products')
+      const s = sessionStorage.getItem('admin_secret') ?? ''
+      const res = await fetch('/api/products', {
+        headers: { 'x-admin-secret': s },
+      })
       if (!res.ok) throw new Error('Failed')
-      setProducts(await res.json())
+      const data = await res.json()
+      // API returns { products: [], total, page, ... } — extract the array
+      setProducts(Array.isArray(data) ? data : (data.products ?? []))
     } catch { setError('Failed to load products') }
     finally { setLoading(false) }
   }
