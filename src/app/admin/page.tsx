@@ -21,7 +21,7 @@ export default function AdminPage() {
   function handleLogin() {
     setAuthed(true)
     sessionStorage.setItem('admin_authed', 'true')
-    sessionStorage.setItem('admin_secret', 'oceancatch-admin-2024')
+    sessionStorage.setItem('admin_secret', 'oceancatch-admin')
   }
 
   function handleLogout() {
