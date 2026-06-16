@@ -790,7 +790,7 @@ function ProductFormModal({ editTarget, secret, onClose, onSuccess, showToast }:
       let imageId = form.imageId
       if (imageFile) {
         setUploadProgress(30)
-        const result = await uploadToCloudinary(imageFile)
+        const result = await uploadToCloudinary(imageFile, secret)
         imageUrl = result.url; imageId = result.publicId
         setUploadProgress(80)
       }
