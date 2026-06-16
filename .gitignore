@@ -37,6 +37,9 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+*.tar
+
+
 # Keep .env.example safe to commit
 !.env.example
 
