@@ -103,17 +103,7 @@ export default async function HomePage({
           </div>
         </div>
 
-        {/* Breadcrumb */}
-        <div className="bg-gray-50 border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
-            <h1 className="text-lg font-bold text-gray-800 mb-1">Buy Fish</h1>
-            <p className="text-sm text-gray-500">
-              <Link href="/" className="hover:text-[#0891B2] transition-colors">Home</Link>
-              <span className="mx-2">/</span>
-              <span className="text-gray-700">Buy Fish</span>
-            </p>
-          </div>
-        </div>
+
       </header>
 
       {/* ── MAIN ── */}
