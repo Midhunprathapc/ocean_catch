@@ -5,11 +5,11 @@ import {
 } from 'lucide-react'
 import { ContactForm } from '@/components/contact-form'
 
-const COMPANY_PHONE = '+91 9656200209'
+const COMPANY_PHONE = '8086607878'
 
 export const metadata = {
-  title: 'Contact Us — OceanCatch',
-  description: 'Get in touch with OceanCatch. Call, WhatsApp, or email us to place orders or get support.',
+  title: 'Contact Us — Sea Harvest Premium Seafoods',
+  description: 'Get in touch with Sea Harvest Premium Seafoods. Call, WhatsApp, or email us to place orders or get support.',
 }
 
 export default function ContactPage() {
@@ -20,10 +20,12 @@ export default function ContactPage() {
       <header className="bg-white shadow-sm sticky top-0 z-40">
         <div className="border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between py-4">
-              <Link href="/" className="flex flex-col items-start">
-                <span className="text-2xl font-bold text-[#0891B2] tracking-wide">OceanCatch</span>
-                <span className="text-[10px] font-medium text-gray-500 tracking-[0.2em] -mt-1">DEFINITELY FRESH</span>
+            <div className="flex items-center justify-between py-3 sm:py-4 gap-2 sm:gap-4">
+              <Link href="/" className="min-w-0">
+                <div className="flex flex-col items-start">
+                  <span className="text-base sm:text-2xl font-bold text-[#0891B2] tracking-tight sm:tracking-wide leading-tight">Sea Harvest Premium Seafoods</span>
+                  <span className="text-[9px] sm:text-[10px] font-medium text-gray-500 tracking-[0.2em] mt-0.5">DEFINITELY FRESH</span>
+                </div>
               </Link>
               <a href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`} className="flex items-center gap-2 bg-[#0891B2] hover:bg-[#0E7490] text-white px-4 py-2.5 rounded-lg transition-colors text-sm font-semibold">
                 <PhoneCall className="w-4 h-4" /><span className="hidden sm:inline">Call to Order</span>
@@ -34,19 +36,19 @@ export default function ContactPage() {
         <div className="border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between py-2.5">
-              <nav className="flex items-center gap-6">
+              <nav className="flex items-center gap-4 sm:gap-6 overflow-x-auto pb-2 sm:pb-0 whitespace-nowrap">
                 <Link href="/" className="bg-[#0891B2] hover:bg-[#0E7490] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors">
                   <Fish className="w-4 h-4" />Buy Fish
                 </Link>
-                <Link href="/story" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors">OceanCatch Story</Link>
+                <Link href="/story" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors">Our Story</Link>
                 <Link href="/contact" className="text-sm font-medium text-[#0891B2]">Reach Us</Link>
               </nav>
               <div className="hidden sm:flex items-center gap-4">
                 <a href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`} className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#0891B2] transition-colors">
                   <Phone className="w-3 h-3" />{COMPANY_PHONE}
                 </a>
-                <a href="mailto:midhunprathap.in@gmail.com" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
-                  <Mail className="w-3 h-3" />midhunprathap.in@gmail.com
+                <a href="mailto:tonykannala@gmail.com" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                  <Mail className="w-3 h-3" />tonykannala@gmail.com
                 </a>
               </div>
             </div>
@@ -95,13 +97,13 @@ export default function ContactPage() {
               {
                 icon: MessageCircle, bg: 'bg-[#25D366]',
                 title: 'WhatsApp',
-                content: <a href={`https://wa.me/${COMPANY_PHONE.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-sm text-[#25D366] font-semibold hover:underline">Chat with us</a>,
+                content: <a href={`https://wa.me/${'8089993930'}`} target="_blank" rel="noopener noreferrer" className="text-sm text-[#25D366] font-semibold hover:underline">Chat with us</a>,
                 sub: 'Quick response guaranteed',
               },
               {
                 icon: Mail, bg: 'bg-[#0891B2]',
                 title: 'Email Us',
-                content: <a href="mailto:midhunprathap.in@gmail.com" className="text-sm text-[#0891B2] font-semibold hover:underline">midhunprathap.in@gmail.com</a>,
+                content: <a href="mailto:tonykannala@gmail.com" className="text-sm text-[#0891B2] font-semibold hover:underline">tonykannala@gmail.com</a>,
                 sub: 'We reply within 24 hours',
               },
               {
@@ -144,7 +146,7 @@ export default function ContactPage() {
                 <div className="bg-gradient-to-br from-[#e0f2fe] to-[#bae6fd] h-56 flex items-center justify-center relative">
                   <div className="text-center">
                     <MapPin className="w-10 h-10 text-[#0891B2] mx-auto mb-2" />
-                    <p className="text-sm font-semibold text-[#0891B2]">OceanCatch HQ</p>
+                    <p className="text-sm font-semibold text-[#0891B2]">Sea Harvest Premium Seafoods HQ</p>
                     <p className="text-xs text-gray-600">42, Marine Drive, Kochi, Kerala 682031</p>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0">
@@ -188,7 +190,7 @@ export default function ContactPage() {
                 <div className="flex items-center gap-4">
                   <a href="#" className="w-12 h-12 flex items-center justify-center rounded-full bg-[#1877F2] text-white hover:opacity-80 transition-opacity"><Facebook className="w-5 h-5" /></a>
                   <a href="#" className="w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white hover:opacity-80 transition-opacity"><Instagram className="w-5 h-5" /></a>
-                  <a href={`https://wa.me/${COMPANY_PHONE.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full bg-[#25D366] text-white hover:opacity-80 transition-opacity"><MessageCircle className="w-5 h-5" /></a>
+                  <a href={`https://wa.me/${'8089993930'}`} target="_blank" rel="noopener noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full bg-[#25D366] text-white hover:opacity-80 transition-opacity"><MessageCircle className="w-5 h-5" /></a>
                 </div>
               </div>
             </div>
@@ -202,7 +204,7 @@ export default function ContactPage() {
               <a href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 bg-white text-[#0891B2] text-sm font-semibold px-8 py-3.5 rounded-xl hover:bg-gray-50 transition-colors">
                 <PhoneCall className="w-4 h-4" />Call Now
               </a>
-              <a href={`https://wa.me/${COMPANY_PHONE.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white text-sm font-semibold px-8 py-3.5 rounded-xl hover:bg-[#1DA851] transition-colors">
+              <a href={`https://wa.me/${'8089993930'}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white text-sm font-semibold px-8 py-3.5 rounded-xl hover:bg-[#1DA851] transition-colors">
                 <MessageCircle className="w-4 h-4" />WhatsApp Us
               </a>
             </div>
@@ -216,13 +218,13 @@ export default function ContactPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               <div>
-                <span className="text-2xl font-bold text-[#0891B2] tracking-wide">OceanCatch</span>
+                <span className="text-xl sm:text-2xl font-bold text-[#0891B2] tracking-wide">Sea Harvest Premium Seafoods</span>
                 <p className="mt-4 text-xs text-gray-500 leading-relaxed">Premium quality seafood delivered fresh to your doorstep.</p>
               </div>
               <div>
                 <h4 className="text-sm font-bold text-gray-900 mb-4">Quick Links</h4>
                 <ul className="space-y-2.5">
-                  <li><Link href="/story" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Why OceanCatch?</Link></li>
+                  <li><Link href="/story" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Why Sea Harvest Premium Seafoods?</Link></li>
                   <li><Link href="/contact" className="text-sm text-[#0891B2] font-medium">Reach Us</Link></li>
                 </ul>
               </div>
@@ -246,7 +248,7 @@ export default function ContactPage() {
         </div>
         <div className="bg-[#0891B2]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <p className="text-xs text-white/90 text-center">© OceanCatch, a unit of Hallmark Food Products LLP.</p>
+            <p className="text-xs text-white/90 text-center">© Sea Harvest Premium Seafoods, a unit of Hallmark Food Products LLP.</p>
           </div>
         </div>
       </footer>

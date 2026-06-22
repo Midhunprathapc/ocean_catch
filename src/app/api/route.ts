@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   try {
     await db.$queryRaw`SELECT 1`
     return NextResponse.json({
-      app:        'OceanCatch API',
+      app:        'Sea Harvest Premium Seafoods API',
       version:    '2.0.0',
       status:     'ok',
       db:         'connected',

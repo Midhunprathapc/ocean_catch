@@ -10,11 +10,11 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'OceanCatch - Definitely Fresh | Premium Seafood Delivery',
+  title: 'Sea Harvest Premium Seafoods - Definitely Fresh | Premium Seafood Delivery',
   description: 'Fresh seafood delivered to your doorstep. Premium quality fish, prawns, crabs and more from Kerala coast.',
   icons: { icon: '/logo.svg' },
   openGraph: {
-    title: 'OceanCatch — Definitely Fresh',
+    title: 'Sea Harvest Premium Seafoods — Definitely Fresh',
     description: 'Premium quality seafood delivered to your doorstep from Kerala coast.',
     type: 'website',
   },

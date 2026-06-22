@@ -113,7 +113,7 @@ function LoginPage({ onLogin }: { onLogin: () => void }) {
                 transition={{ delay: 0.3 }}
                 className="text-center"
               >
-                <h1 className="text-2xl font-bold text-white tracking-tight">OceanCatch</h1>
+                <h1 className="text-2xl font-bold text-white tracking-tight">Sea Harvest Premium Seafoods</h1>
                 <p className="text-cyan-400 text-xs font-semibold tracking-[0.25em] mt-1">ADMIN PORTAL</p>
               </motion.div>
             </div>
@@ -216,7 +216,7 @@ function LoginPage({ onLogin }: { onLogin: () => void }) {
               transition={{ delay: 0.7 }}
               className="text-center text-xs text-slate-700 mt-7"
             >
-              Restricted access · OceanCatch Control Panel
+              Restricted access · Sea Harvest Premium Seafoods Control Panel
             </motion.p>
           </div>
 

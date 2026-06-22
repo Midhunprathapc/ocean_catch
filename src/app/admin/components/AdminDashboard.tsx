@@ -54,6 +54,13 @@ type NavItem = 'dashboard' | 'products'
 export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [activeNav, setActiveNav] = useState<NavItem>('dashboard')
   const [sidebarOpen, setSidebarOpen] = useState(true)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setSidebarOpen(false)
+    }
+  }, [])
+
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -118,6 +125,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
         onNavChange={setActiveNav}
         onLogout={onLogout}
         productsCount={products.length}
+        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
       />
 
       {/* Main content */}
@@ -191,9 +199,9 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
 }
 
 // ─── Sidebar ─────────────────────────────────────────────────────────────────
-function AdminSidebar({ open, activeNav, onNavChange, onLogout, productsCount }: {
+function AdminSidebar({ open, activeNav, onNavChange, onLogout, productsCount, onToggleSidebar }: {
   open: boolean; activeNav: NavItem; onNavChange: (n: NavItem) => void;
-  onLogout: () => void; productsCount: number
+  onLogout: () => void; productsCount: number; onToggleSidebar: () => void
 }) {
   const navItems = [
     { id: 'dashboard' as NavItem, icon: LayoutDashboard, label: 'Dashboard' },
@@ -202,8 +210,8 @@ function AdminSidebar({ open, activeNav, onNavChange, onLogout, productsCount }:
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside className={`hidden lg:flex flex-col fixed top-0 left-0 h-full bg-slate-900 border-r border-slate-800/60 z-40 transition-all duration-300 ${open ? 'w-64' : 'w-16'}`}>
+      {/* Sidebar */}
+      <aside className={`flex flex-col fixed top-0 left-0 h-full bg-slate-900 border-r border-slate-800/60 z-40 transition-all duration-300 ${open ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0 lg:w-16'}`}>
         {/* Logo */}
         <div className="flex items-center gap-3 px-4 py-5 border-b border-slate-800/60 overflow-hidden">
           <div className="w-9 h-9 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-cyan-500/20">
@@ -211,7 +219,7 @@ function AdminSidebar({ open, activeNav, onNavChange, onLogout, productsCount }:
           </div>
           {open && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              <p className="text-sm font-bold text-white">OceanCatch</p>
+              <p className="text-sm font-bold text-white">Sea Harvest Premium Seafoods</p>
               <p className="text-[10px] text-cyan-400 font-medium tracking-wider">ADMIN</p>
             </motion.div>
           )}
@@ -222,7 +230,10 @@ function AdminSidebar({ open, activeNav, onNavChange, onLogout, productsCount }:
           {navItems.map(item => (
             <button
               key={item.id}
-              onClick={() => onNavChange(item.id)}
+              onClick={() => {
+                onNavChange(item.id)
+                if (typeof window !== 'undefined' && window.innerWidth < 1024 && open) onToggleSidebar()
+              }}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative
                 ${activeNav === item.id
                   ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/20'
@@ -275,7 +286,7 @@ function AdminSidebar({ open, activeNav, onNavChange, onLogout, productsCount }:
 
       {/* Mobile sidebar backdrop */}
       {open && (
-        <div className="lg:hidden fixed inset-0 bg-black/60 z-30" onClick={() => {}} />
+        <div className="lg:hidden fixed inset-0 bg-black/60 z-30" onClick={onToggleSidebar} />
       )}
     </>
   )
@@ -298,7 +309,7 @@ function AdminTopBar({ sidebarOpen, onToggleSidebar, activeNav }: {
       <div className="flex items-center gap-4 px-4 sm:px-6 py-4">
         <button
           onClick={onToggleSidebar}
-          className="hidden lg:flex w-8 h-8 items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          className="flex w-8 h-8 items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
         >
           <Menu className="w-4 h-4" />
         </button>
@@ -567,7 +578,7 @@ function ProductsView({ products, allProducts, loading, error, secret, searchQue
           />
         </div>
         {/* Filters */}
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 items-center">
           <select
             value={categoryFilter}
             onChange={e => setCategoryFilter(e.target.value)}

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Admin — OceanCatch',
-  description: 'OceanCatch admin control panel',
+  title: 'Admin — Sea Harvest Premium Seafoods',
+  description: 'Sea Harvest Premium Seafoods admin control panel',
   robots: { index: false, follow: false },
 }
 

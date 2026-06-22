@@ -4,11 +4,11 @@ import {
   ShieldCheck, Truck, Scale, ArrowLeft, Facebook, Instagram
 } from 'lucide-react'
 
-const COMPANY_PHONE = '+91 9656200209'
+const COMPANY_PHONE = '8086607878'
 
 export const metadata = {
-  title: 'Why OceanCatch — OceanCatch',
-  description: 'Learn about OceanCatch — how we source fresh seafood directly from Kerala fishermen and deliver to your doorstep.',
+  title: 'Why Sea Harvest Premium Seafoods — Sea Harvest Premium Seafoods',
+  description: 'Learn about Sea Harvest Premium Seafoods — how we source fresh seafood directly from Kerala fishermen and deliver to your doorstep.',
 }
 
 export default function StoryPage() {
@@ -19,10 +19,12 @@ export default function StoryPage() {
       <header className="bg-white shadow-sm sticky top-0 z-40">
         <div className="border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between py-4">
-              <Link href="/" className="flex flex-col items-start">
-                <span className="text-2xl font-bold text-[#0891B2] tracking-wide">OceanCatch</span>
-                <span className="text-[10px] font-medium text-gray-500 tracking-[0.2em] -mt-1">DEFINITELY FRESH</span>
+            <div className="flex items-center justify-between py-3 sm:py-4 gap-2 sm:gap-4">
+              <Link href="/" className="min-w-0 flex-1">
+                <div className="flex flex-col items-start">
+                  <span className="text-base sm:text-2xl font-bold text-[#0891B2] tracking-tight sm:tracking-wide leading-tight break-words">Sea Harvest Premium Seafoods</span>
+                  <span className="text-[9px] sm:text-[10px] font-medium text-gray-500 tracking-[0.2em] mt-0.5">DEFINITELY FRESH</span>
+                </div>
               </Link>
               <a href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`} className="flex items-center gap-2 bg-[#0891B2] hover:bg-[#0E7490] text-white px-4 py-2.5 rounded-lg transition-colors text-sm font-semibold">
                 <PhoneCall className="w-4 h-4" /><span className="hidden sm:inline">Call to Order</span>
@@ -33,19 +35,19 @@ export default function StoryPage() {
         <div className="border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between py-2.5">
-              <nav className="flex items-center gap-6">
+              <nav className="flex items-center gap-4 sm:gap-6 overflow-x-auto pb-2 sm:pb-0 whitespace-nowrap">
                 <Link href="/" className="bg-[#0891B2] hover:bg-[#0E7490] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors">
                   <Fish className="w-4 h-4" />Buy Fish
                 </Link>
-                <Link href="/story" className="text-sm font-medium text-[#0891B2]">OceanCatch Story</Link>
+                <Link href="/story" className="text-sm font-medium text-[#0891B2]">Our Story</Link>
                 <Link href="/contact" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors">Reach Us</Link>
               </nav>
               <div className="hidden sm:flex items-center gap-4">
                 <a href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`} className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#0891B2] transition-colors">
                   <Phone className="w-3 h-3" />{COMPANY_PHONE}
                 </a>
-                <a href="mailto:midhunprathap.in@gmail.com" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
-                  <Mail className="w-3 h-3" />midhunprathap.in@gmail.com
+                <a href="mailto:tonykannala@gmail.com" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                  <Mail className="w-3 h-3" />tonykannala@gmail.com
                 </a>
               </div>
             </div>
@@ -53,11 +55,11 @@ export default function StoryPage() {
         </div>
         <div className="bg-gray-50 border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
-            <h1 className="text-lg font-bold text-gray-800 mb-1">Why OceanCatch</h1>
+            <h1 className="text-lg font-bold text-gray-800 mb-1">Why Sea Harvest Premium Seafoods</h1>
             <p className="text-sm text-gray-500">
               <Link href="/" className="hover:text-[#0891B2] transition-colors">Home</Link>
               <span className="mx-2">/</span>
-              <span className="text-gray-700">Why OceanCatch</span>
+              <span className="text-gray-700">Why Sea Harvest Premium Seafoods</span>
             </p>
           </div>
         </div>
@@ -76,7 +78,7 @@ export default function StoryPage() {
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white/90 mb-4">
               <Fish className="w-3 h-3" />Our Story
             </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Why OceanCatch?</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Why Sea Harvest Premium Seafoods?</h1>
             <p className="text-base md:text-lg text-white/80 max-w-2xl leading-relaxed">
               We believe everyone deserves access to the freshest seafood. That&apos;s why we go straight from the ocean to your doorstep — no middlemen, no delays, no compromises.
             </p>
@@ -96,7 +98,7 @@ export default function StoryPage() {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div className="space-y-4 text-gray-600 text-sm leading-relaxed">
-                  <p>OceanCatch was born from a simple observation: the seafood on our plates often traveled through too many hands before reaching us. By the time it arrived, freshness was compromised and prices were inflated.</p>
+                  <p>Sea Harvest Premium Seafoods was born from a simple observation: the seafood on our plates often traveled through too many hands before reaching us. By the time it arrived, freshness was compromised and prices were inflated.</p>
                   <p>Founded in 2020 in Kochi, Kerala — the heart of India&apos;s fishing coast — we set out to change that. We built direct relationships with local fishermen and created a supply chain that gets fish from the boat to your door in hours, not days.</p>
                   <p>What started as a small operation serving Kochi has now grown into a trusted seafood brand delivering across Kerala, Karnataka, and Tamil Nadu — always with the same promise: <span className="font-semibold text-[#0891B2]">Definitely Fresh.</span></p>
                 </div>
@@ -187,7 +189,7 @@ export default function StoryPage() {
               <a href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 bg-white text-[#0891B2] text-sm font-semibold px-8 py-3.5 rounded-xl hover:bg-gray-50 transition-colors">
                 <PhoneCall className="w-4 h-4" />Call to Order
               </a>
-              <a href={`https://wa.me/${COMPANY_PHONE.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white text-sm font-semibold px-8 py-3.5 rounded-xl hover:bg-[#1DA851] transition-colors">
+              <a href={`https://wa.me/${'8089993930'}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#25D366] text-white text-sm font-semibold px-8 py-3.5 rounded-xl hover:bg-[#1DA851] transition-colors">
                 <MessageCircle className="w-4 h-4" />WhatsApp Us
               </a>
             </div>
@@ -201,13 +203,13 @@ export default function StoryPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               <div>
-                <span className="text-2xl font-bold text-[#0891B2] tracking-wide">OceanCatch</span>
+                <span className="text-xl sm:text-2xl font-bold text-[#0891B2] tracking-wide">Sea Harvest Premium Seafoods</span>
                 <p className="mt-4 text-xs text-gray-500 leading-relaxed">Premium quality seafood delivered fresh to your doorstep.</p>
               </div>
               <div>
                 <h4 className="text-sm font-bold text-gray-900 mb-4">Quick Links</h4>
                 <ul className="space-y-2.5">
-                  <li><Link href="/story" className="text-sm text-[#0891B2] font-medium">Why OceanCatch?</Link></li>
+                  <li><Link href="/story" className="text-sm text-[#0891B2] font-medium">Why Sea Harvest Premium Seafoods?</Link></li>
                   <li><Link href="/contact" className="text-sm text-gray-500 hover:text-[#0891B2] transition-colors">Reach Us</Link></li>
                 </ul>
               </div>
@@ -231,7 +233,7 @@ export default function StoryPage() {
         </div>
         <div className="bg-[#0891B2]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <p className="text-xs text-white/90 text-center">© OceanCatch, a unit of Hallmark Food Products LLP.</p>
+            <p className="text-xs text-white/90 text-center">© Sea Harvest Premium Seafoods, a unit of Hallmark Food Products LLP.</p>
           </div>
         </div>
       </footer>

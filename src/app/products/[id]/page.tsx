@@ -7,7 +7,7 @@ import {
   ShieldCheck, Scale, Droplets, Phone, Mail
 } from 'lucide-react'
 
-const COMPANY_PHONE = '+91 9656200209'
+const COMPANY_PHONE = '8086607878'
 
 export const revalidate = 60
 
@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const product = await db.product.findUnique({ where: { id, deletedAt: null } })
   if (!product) return { title: 'Product Not Found' }
   return {
-    title: `${product.title} — OceanCatch`,
-    description: product.description ?? `Buy fresh ${product.title} from OceanCatch. Premium quality, same-day delivery.`,
+    title: `${product.title} — Sea Harvest Premium Seafoods`,
+    description: product.description ?? `Buy fresh ${product.title} from Sea Harvest Premium Seafoods. Premium quality, same-day delivery.`,
   }
 }
 
@@ -33,10 +33,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       <header className="bg-white shadow-sm sticky top-0 z-40">
         <div className="border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between py-4">
-              <Link href="/" className="flex flex-col items-start">
-                <span className="text-2xl font-bold text-[#0891B2] tracking-wide">OceanCatch</span>
-                <span className="text-[10px] font-medium text-gray-500 tracking-[0.2em] -mt-1">DEFINITELY FRESH</span>
+            <div className="flex items-center justify-between py-3 sm:py-4 gap-2 sm:gap-4">
+              <Link href="/" className="min-w-0">
+                <div className="flex flex-col items-start">
+                  <span className="text-base sm:text-2xl font-bold text-[#0891B2] tracking-tight sm:tracking-wide leading-tight">Sea Harvest Premium Seafoods</span>
+                  <span className="text-[9px] sm:text-[10px] font-medium text-gray-500 tracking-[0.2em] mt-0.5">DEFINITELY FRESH</span>
+                </div>
               </Link>
               <a href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`} className="flex items-center gap-2 bg-[#0891B2] hover:bg-[#0E7490] text-white px-4 py-2.5 rounded-lg transition-colors text-sm font-semibold">
                 <PhoneCall className="w-4 h-4" /><span className="hidden sm:inline">Call to Order</span>
@@ -47,19 +49,19 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between py-2.5">
-              <nav className="flex items-center gap-6">
+              <nav className="flex items-center gap-4 sm:gap-6 overflow-x-auto pb-2 sm:pb-0 whitespace-nowrap">
                 <Link href="/" className="bg-[#0891B2] hover:bg-[#0E7490] text-white px-5 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 transition-colors">
                   <Fish className="w-4 h-4" />Buy Fish
                 </Link>
-                <Link href="/story" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors">OceanCatch Story</Link>
+                <Link href="/story" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors">Our Story</Link>
                 <Link href="/contact" className="text-sm font-medium text-gray-700 hover:text-[#0891B2] transition-colors">Reach Us</Link>
               </nav>
               <div className="hidden sm:flex items-center gap-4">
                 <a href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`} className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#0891B2] transition-colors">
                   <Phone className="w-3 h-3" />{COMPANY_PHONE}
                 </a>
-                <a href="mailto:midhunprathap.in@gmail.com" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
-                  <Mail className="w-3 h-3" />midhunprathap.in@gmail.com
+                <a href="mailto:tonykannala@gmail.com" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                  <Mail className="w-3 h-3" />tonykannala@gmail.com
                 </a>
               </div>
             </div>
@@ -162,7 +164,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                     <PhoneCall className="w-5 h-5" />Call to Order
                   </a>
                   <a
-                    href={`https://wa.me/${COMPANY_PHONE.replace(/[^0-9]/g, '')}?text=Hi, I want to order ${encodeURIComponent(product.title)}`}
+                    href={`https://wa.me/${'8089993930'}?text=Hi, I want to order ${encodeURIComponent(product.title)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full bg-[#25D366] hover:bg-[#1DA851] text-white text-sm font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
@@ -201,7 +203,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       {/* ── FOOTER ── */}
       <footer className="mt-auto bg-[#0891B2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-white/90">© OceanCatch, a unit of Hallmark Food Products LLP.</p>
+          <p className="text-xs text-white/90">© Sea Harvest Premium Seafoods, a unit of Hallmark Food Products LLP.</p>
           <Link href="/" className="text-xs text-white/80 hover:text-white transition-colors">← Back to all products</Link>
         </div>
       </footer>
