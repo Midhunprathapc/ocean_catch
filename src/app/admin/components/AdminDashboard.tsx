@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { uploadToCloudinary } from '@/lib/cloudinary'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { OrdersView } from './OrdersView'
 
 interface Product {
   id: string
@@ -49,7 +50,7 @@ const EMPTY_FORM = {
   price: '', unit: 'kg', inStock: true, imageUrl: '', imageId: '',
 }
 
-type NavItem = 'dashboard' | 'products'
+type NavItem = 'dashboard' | 'products' | 'orders'
 
 export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [activeNav, setActiveNav] = useState<NavItem>('dashboard')
@@ -117,7 +118,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   ].filter(d => d.value > 0)
 
   return (
-    <div className="min-h-screen bg-slate-950 flex text-white">
+    <div className="min-h-screen bg-slate-950 flex text-white overflow-x-hidden w-full relative">
       {/* Sidebar */}
       <AdminSidebar
         open={sidebarOpen}
@@ -129,7 +130,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       />
 
       {/* Main content */}
-      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'}`}>
+      <div className={`flex-1 min-w-0 flex flex-col min-h-screen transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'}`}>
         {/* Top bar */}
         <AdminTopBar
           sidebarOpen={sidebarOpen}
@@ -171,7 +172,9 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                 showToast={showToast}
               />
             )}
-          </AnimatePresence>
+            {activeNav === 'orders' && (
+              <OrdersView key="orders" showToast={showToast} />
+            )}          </AnimatePresence>
         </main>
       </div>
 
@@ -206,6 +209,7 @@ function AdminSidebar({ open, activeNav, onNavChange, onLogout, productsCount, o
   const navItems = [
     { id: 'dashboard' as NavItem, icon: LayoutDashboard, label: 'Dashboard' },
     { id: 'products' as NavItem, icon: Package, label: 'Products', badge: productsCount },
+    { id: 'orders'   as NavItem, icon: ShoppingBag, label: 'Orders' },
   ]
 
   return (
@@ -299,10 +303,12 @@ function AdminTopBar({ sidebarOpen, onToggleSidebar, activeNav }: {
   const titles: Record<NavItem, string> = {
     dashboard: 'Dashboard',
     products: 'Product Management',
+    orders: 'Orders & Invoices',
   }
   const subtitles: Record<NavItem, string> = {
     dashboard: 'Overview of your store performance',
     products: 'Manage your seafood catalog',
+    orders: 'Manage orders, generate & share PDF invoices',
   }
   return (
     <header className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-xl border-b border-slate-800/60">
@@ -913,7 +919,7 @@ function ProductFormModal({ editTarget, secret, onClose, onSuccess, showToast }:
           </div>
 
           {/* Category + Unit */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
                 Category <span className="text-red-400">*</span>
@@ -939,7 +945,7 @@ function ProductFormModal({ editTarget, secret, onClose, onSuccess, showToast }:
           </div>
 
           {/* Price + Stock */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
                 Price (₹) <span className="text-red-400">*</span>

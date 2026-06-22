@@ -113,7 +113,7 @@ function LoginPage({ onLogin }: { onLogin: () => void }) {
                 transition={{ delay: 0.3 }}
                 className="text-center"
               >
-                <h1 className="text-2xl font-bold text-white tracking-tight">Sea Harvest Premium Seafoods</h1>
+                <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-tight">Sea Harvest Premium Seafoods</h1>
                 <p className="text-cyan-400 text-xs font-semibold tracking-[0.25em] mt-1">ADMIN PORTAL</p>
               </motion.div>
             </div>
