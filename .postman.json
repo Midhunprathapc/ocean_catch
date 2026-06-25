@@ -1,0 +1,38 @@
+{
+  "version": "0.1",
+  "project": {
+    "name": "Fish Store",
+    "baseUrl": "http://localhost:3000"
+  },
+  "default": {
+    "workspace": "my-workspace",
+    "collection": "fish-store-api",
+    "environment": "local"
+  },
+  "workspaces": {
+    "my-workspace": {
+      "id": "74567c6f-23be-457b-809c-f53df363b5dd",
+      "name": "My Workspace",
+      "type": "personal"
+    }
+  },
+  "collections": {
+    "fish-store-api": {
+      "id": "3711f0a7-84b9-4301-9318-b3e238f021ea",
+      "uid": "43159090-3711f0a7-84b9-4301-9318-b3e238f021ea",
+      "name": "Fish Store API",
+      "workspace": "my-workspace"
+    }
+  },
+  "environments": {
+    "local": {
+      "id": "fec4330c-514f-489d-8263-db632945d779",
+      "uid": "43159090-fec4330c-514f-489d-8263-db632945d779",
+      "name": "Fish Store - Local",
+      "workspace": "my-workspace",
+      "variables": {
+        "API_URL": "http://localhost:3000"
+      }
+    }
+  }
+}

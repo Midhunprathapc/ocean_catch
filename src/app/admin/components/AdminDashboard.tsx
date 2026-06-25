@@ -14,6 +14,7 @@ import {
 import { uploadToCloudinary } from '@/lib/cloudinary'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { OrdersView } from './OrdersView'
+import { SalesOverview } from './SalesOverview'
 
 interface Product {
   id: string
@@ -373,6 +374,9 @@ function DashboardView({ products, loading, inStock, outOfStock, avgPrice, categ
       transition={{ duration: 0.3 }}
       className="space-y-6 max-w-7xl"
     >
+      {/* Sales Overview */}
+      <SalesOverview />
+
       {/* Stats grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
@@ -558,9 +562,32 @@ function ProductsView({ products, allProducts, loading, error, secret, searchQue
   const [showForm, setShowForm] = useState(false)
   const [editTarget, setEditTarget] = useState<Product | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null)
+  const [togglingStock, setTogglingStock] = useState<string | null>(null)
 
   function openAdd() { setEditTarget(null); setShowForm(true) }
   function openEdit(p: Product) { setEditTarget(p); setShowForm(true) }
+
+  async function toggleStock(p: Product) {
+    setTogglingStock(p.id)
+    try {
+      const res = await fetch(`/api/products/${p.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
+        body: JSON.stringify({ inStock: !p.inStock }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        showToast(data?.error ?? 'Failed to update stock status', 'error')
+        return
+      }
+      showToast(p.inStock ? `${p.title} marked as Out of Stock` : `${p.title} marked as In Stock`, 'success')
+      onRefresh()
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : 'Something went wrong', 'error')
+    } finally {
+      setTogglingStock(null)
+    }
+  }
 
   return (
     <motion.div
@@ -728,6 +755,24 @@ function ProductsView({ products, allProducts, loading, error, secret, searchQue
                           className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:text-cyan-400 hover:bg-cyan-500/10 transition-all"
                         >
                           <Pencil className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => toggleStock(p)}
+                          disabled={togglingStock === p.id}
+                          title={p.inStock ? 'Mark as Out of Stock' : 'Mark as In Stock'}
+                          className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all ${
+                            p.inStock
+                              ? 'text-slate-500 hover:text-orange-400 hover:bg-orange-500/10'
+                              : 'text-orange-400 hover:text-emerald-400 hover:bg-emerald-500/10'
+                          } disabled:opacity-50 disabled:cursor-not-allowed`}
+                        >
+                          {togglingStock === p.id ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : p.inStock ? (
+                            <Package className="w-4 h-4" />
+                          ) : (
+                            <Package className="w-4 h-4" />
+                          )}
                         </button>
                         <button
                           onClick={() => setDeleteTarget(p)}

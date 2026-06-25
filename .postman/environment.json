@@ -1,0 +1,11 @@
+{
+  "name": "Fish Store - Local",
+  "values": [
+    {
+      "key": "API_URL",
+      "value": "http://localhost:3000",
+      "enabled": true,
+      "description": "Base URL for the local development server"
+    }
+  ]
+}
